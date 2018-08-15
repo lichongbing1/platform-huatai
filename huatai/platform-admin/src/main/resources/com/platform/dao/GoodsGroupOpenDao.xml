@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.GoodsGroupOpenDao">
+
+    <resultMap type="com.platform.entity.GoodsGroupOpenEntity" id="goodsGroupOpenMap">
+        <result property="id" column="id"/>
+        <result property="groupId" column="group_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="openTime" column="open_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="attendStatus" column="attend_status"/>
+        <result property="attendNum" column="attend_num"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.platform.entity.GoodsGroupOpenEntity">
+		select
+			id,
+			group_id,
+			user_id,
+			open_time,
+			end_time,
+			attend_status,
+			attend_num
+		from mall_goods_group_open
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.platform.entity.GoodsGroupOpenEntity">
+		select
+		mall_goods_group_open.id,
+		mall_goods_group_open.group_id,
+		mall_goods_group_open.user_id,
+		mall_goods_group_open.open_time,
+		mall_goods_group_open.end_time,
+		mall_goods_group_open.attend_status,
+		mall_goods_group_open.attend_num,
+		mall_user.username user_name
+		from mall_goods_group_open
+		LEFT JOIN mall_user on mall_goods_group_open.user_id=mall_user.id
+		WHERE 1=1
+		<if test="groupId != null and groupId != '' and groupId != 'null'">
+			AND group_id = #{groupId}
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from mall_goods_group_open
+		WHERE 1=1
+		<if test="groupId != null and groupId != ''">
+			AND group_id = #{groupId}
+		</if>
+	</select>
+	 
+	<insert id="save" parameterType="com.platform.entity.GoodsGroupOpenEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_goods_group_open(
+			group_id,
+			user_id,
+			open_time,
+			end_time,
+			attend_status,
+			attend_num)
+		values(
+			#{groupId},
+			#{userId},
+			#{openTime},
+			#{endTime},
+			#{attendStatus},
+			#{attendNum})
+	</insert>
+	 
+	<update id="update" parameterType="com.platform.entity.GoodsGroupOpenEntity">
+		update mall_goods_group_open
+		<set>
+			<if test="groupId != null">`group_id` = #{groupId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="openTime != null">`open_time` = #{openTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="attendStatus != null">`attend_status` = #{attendStatus}, </if>
+			<if test="attendNum != null">`attend_num` = #{attendNum}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from mall_goods_group_open where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from mall_goods_group_open where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

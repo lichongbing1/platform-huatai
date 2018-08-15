@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.TemplateConfDao">
+
+    <resultMap type="com.platform.entity.TemplateConfVo" id="templateConfMap">
+        <result property="id" column="id"/>
+        <result property="templateType" column="template_type"/>
+        <result property="templateId" column="template_id"/>
+        <result property="desc" column="desc"/>
+    </resultMap>
+
+    <select id="queryByTypeId" resultMap="templateConfMap">
+		select
+			`id`,
+			`template_type`,
+			`template_id`,
+			`desc`
+		from mall_template_conf
+		where template_type = #{templateType}
+	</select>
+
+    <select id="queryList" resultMap="templateConfMap">
+        select
+        `id`,
+        `template_type`,
+        `template_id`,
+        `desc`
+        from mall_template_conf
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_template_conf
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+</mapper>

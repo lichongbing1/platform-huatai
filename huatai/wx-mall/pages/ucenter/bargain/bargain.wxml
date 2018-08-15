@@ -1,0 +1,119 @@
+<view class="container">
+  <view class="tab-bar">
+    <view wx:for="{{tabList}}" wx:key="{{index}}" bindtap="toggleTab" data-index="{{index}}" class="tab-bar-item {{ index == tabIndex ? 'active' : '' }}">{{ item }}</view>
+  </view>
+  <swiper current="{{tabIndex}}" bindchange="swiperChange" style="height: 92vh;">
+    <!-- 进行中 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:for="{{bargainList1}}" wx:key="{{index}}">
+         <view class="panel-head">
+            <text class="desc">进行中</text>
+            <text class="deadline">剩 {{item.dateformat.day}}天{{item.dateformat.hr}}小时{{item.dateformat.min}}分{{item.dateformat.sec}}秒</text>
+        </view>
+          <view class="panel-body">
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.goods_retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，当前进度
+              <text style="color: #FF5778">￥{{item.retail_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator open-type='redirect' url="../../bargainDetail/bargainDetail?bargainId={{item.bargain_id}}">
+              <button class="btn btn-l">砍价详情</button>
+            </navigator>
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{bargainList1.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无进行中的砍价</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+    <!-- 已完成 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:for="{{bargainList2}}" wx:key="{{index}}">
+          <view class="panel-body">
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.goods_retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，合计
+              <text style="color: #FF5778">￥{{item.order_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator url="../../bargainDetail/bargainDetail?bargainId={{item.bargain_id}}">
+              <button class="btn btn-l">砍价详情</button>
+            </navigator>
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{bargainList2.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无已完成的砍价</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+    <!-- 已失效 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:for="{{bargainList3}}" wx:key="{{index}}">
+          <view class="panel-body">
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.goods_retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，历史进度
+              <text style="color: #FF5778">￥{{item.retail_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator url="../../bargainDetail/bargainDetail?bargainId={{item.bargain_id}}">
+              <button class="btn btn-l">砍价详情</button>
+            </navigator>
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{bargainList3.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无已失效的砍价</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+  </swiper>
+</view>

@@ -1,0 +1,279 @@
+page, .container {
+  height: 100%;
+  background: #f4f4f4;
+}
+
+
+.service-box{
+  background-color: #fff;
+  margin-top: 10px;
+  padding: 0 20px;
+}
+
+.service-item{
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+}
+
+.service-item .label{
+  color: #999999;
+}
+
+.service-item text:not(.label){
+  padding-left: 10px;
+}
+
+.star-box .star{
+  font-size: 1.7em;
+  padding-left: 5px;
+  color: #ddd;
+}
+
+.star-box .star.checked{
+  color: #FEB54C;
+}
+
+.goods-list{
+  background-color: #fff;
+}
+
+.goods-list .input-box{
+  border: 1px solid #ccc;
+  margin: 0 20px;
+  padding: 10px;
+  padding-bottom: 25px;
+}
+
+.goods-list .input-box .content{
+  width: 100%;
+}
+.goods-list .input-box .count{
+  float: right;
+}
+
+.pic-box{
+  margin-top: 10px;
+  padding: 0 20px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.pic-item{
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.pic-item image{
+  width: 100%;
+  height: 100%;
+}
+
+.pic-item .pic-delete{
+  position: absolute;
+  width: 30rpx;
+  height: 30rpx;
+  text-align: center;
+  color: #fff;
+  line-height: 30rpx;
+  top: -15rpx;
+  right: -15rpx;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.pic-handle{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.pic-item.pic-handle image{
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.pic-handle .desc{
+  padding-top: 10px;
+  font-size: .9em;
+  color: #9B9B9B;
+}
+
+.coupon{
+  margin-top: 24rpx;
+  margin-left: 40rpx;
+  display: flex;
+  margin-right: 40rpx;
+  flex-direction: row;
+  align-items: center;
+}
+
+.coupon .left{
+  flex: 1;
+}
+
+.btn-box{
+  margin: 20px 0;
+  padding: 10px 20px;
+}
+
+.name{
+  font-size: 34rpx;
+  color: #fff;
+  margin-bottom: 14rpx;
+}
+
+.time{
+  font-size: 24rpx;
+  color: rgba(255,255,255, 0.8);
+  line-height: 30rpx;
+}
+
+.coupon .right{
+  width: 162rpx;
+}
+
+.condition{
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left:0;
+  height: 78rpx;
+  background: rgba(0,0,0,.08);
+  padding: 24rpx 40rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.condition .txt{
+  display: block;
+  height: 30rpx;
+  flex: 1;
+  overflow: hidden;
+  font-size: 24rpx;
+  line-height: 30rpx;
+  color: #fff;
+}
+
+.condition .icon{
+  margin-left: 30rpx;
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.drawer_box {
+  width: 650rpx;
+  overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  z-index: 1001;
+  background: #f4f4f4;
+  margin: -150px 50rpx 0 50rpx;
+  border-radius: 3px;
+}
+
+.drawer_title {
+  padding: 15px;
+  font: 20px "microsoft yahei";
+  text-align: center;
+  background: #b4282d;
+}
+
+.drawer_content {
+  height: 410px;
+  overflow-y: scroll; /*超出父盒子高度可滚动*/
+}
+
+.btn_ok {
+  padding: 10px;
+  font: 20px "microsoft yahei";
+  text-align: center;
+  border-top: 1px solid #e8e8ea;
+  color: #b4282d;
+}
+
+
+.coupon-box {
+  background-color: #fff;
+  display: flex;
+  border-radius: 5px;
+  flex-direction: row;
+  position: relative;
+}
+
+.coupon-box .coupon-used {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -7.5vmin;
+  height: 15vmin;
+  width: 15vmin;
+  background: url(https://www.meiping123.com/statics/img/icon_used.png) no-repeat center;
+  background-size: contain;
+}
+
+.coupon-box-g {
+  background: linear-gradient(to right, #f0f0f0, #fff);
+}
+
+
+.coupon-bg {
+  width: 35%;
+  background-position: left;
+  background-size: cover;
+  color: #fff;
+  font-size: 2.4rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.coupon-bg > view{
+  font-size: inherit;
+  color: #fff;
+}
+
+.coupon-bg .coupon-currency {
+  font-size: 1rem;
+  padding-right: 5px;
+  color: #fff;
+}
+
+.coupon-bg .coupon-type {
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.coupon-bg1 {
+  background-image: url(https://www.meiping123.com/statics/img/bg_1.png);
+}
+
+.coupon-bg2 {
+  background-image: url(https://www.meiping123.com/statics/img/bg_2.png);
+}
+
+.coupon-info {
+  width: 50%;
+  margin-left: 40px;
+}
+
+.coupon-info .coupon-title {
+  font-size: 1.1rem;
+  padding: 8px 0 4px 0;
+}
+
+.coupon-info .coupon-desc {
+  font-size: 0.9rem;
+  color: #9b9b9b;
+  list-style: outside;
+  padding: 4px 0 8px 0;
+}
+

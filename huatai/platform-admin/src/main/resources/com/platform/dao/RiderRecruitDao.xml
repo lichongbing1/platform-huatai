@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.RiderRecruitDao">
+
+    <resultMap type="com.platform.entity.RiderRecruitEntity" id="riderRecruitMap">
+        <result property="id" column="id"/>
+        <result property="picUrl" column="pic_url"/>
+        <result property="linkMan" column="link_man"/>
+        <result property="linkPhone" column="link_phone"/>
+        <result property="linkMobile" column="link_mobile"/>
+        <result property="address" column="address"/>
+        <result property="description" column="description"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.platform.entity.RiderRecruitEntity">
+		select
+			`id`,
+			`pic_url`,
+			`link_man`,
+			`link_phone`,
+			`link_mobile`,
+			`address`,
+			`description`,
+			`create_by`,
+			`create_time`
+		from mall_rider_recruit
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.platform.entity.RiderRecruitEntity">
+		select
+    		`id`,
+    		`pic_url`,
+    		`link_man`,
+    		`link_phone`,
+    		`link_mobile`,
+    		`address`,
+    		`description`,
+    		`create_by`,
+    		`create_time`
+		from mall_rider_recruit
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from mall_rider_recruit
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.platform.entity.RiderRecruitEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_rider_recruit(
+			`pic_url`,
+			`link_man`,
+			`link_phone`,
+			`link_mobile`,
+			`address`,
+			`description`,
+			`create_by`,
+			`create_time`)
+		values(
+			#{picUrl},
+			#{linkMan},
+			#{linkPhone},
+			#{linkMobile},
+			#{address},
+			#{description},
+			#{createBy},
+			#{createTime})
+	</insert>
+	 
+	<update id="update" parameterType="com.platform.entity.RiderRecruitEntity">
+		update mall_rider_recruit 
+		<set>
+			<if test="picUrl != null">`pic_url` = #{picUrl}, </if>
+			<if test="linkMan != null">`link_man` = #{linkMan}, </if>
+			<if test="linkPhone != null">`link_phone` = #{linkPhone}, </if>
+			<if test="linkMobile != null">`link_mobile` = #{linkMobile}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="description != null">`description` = #{description}, </if>
+			<if test="createBy != null">`create_by` = #{createBy}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from mall_rider_recruit where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from mall_rider_recruit where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

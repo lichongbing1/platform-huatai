@@ -1,0 +1,38 @@
+<view class="container">
+  <view class="store-header">
+    <view bindtap="handleTag" data-index="0" class="store-tag {{ selected == 0 ? 'selected' : '' }}">附近门店</view>
+    <picker mode="region" bindchange="bindRegionChange">
+      <view bindtap="handleTag" data-index="1" class="store-tag  arrow arrow-down {{ selected == 1 ? 'selected' : '' }}">
+      {{ pickerName }}
+      </view>
+    </picker>
+  </view>
+  <scroll-view class="topic-list" scroll-y="true">
+    <view wx:if="{{selected == 0}}" class="list-group" style="margin-top: 0;">
+      <view bindtap="chooseStore" data-item="{{item}}" class="list-cell" wx:for="{{nearStoreList}}" wx:key="{{index}}">
+        <view class="list-cell-bd">
+          <view class="list-label">{{ item.storeName }}</view>
+          <view class="list-label-desc">{{item.storeAddress}}</view>
+          <view class="list-label-desc">距离当前定位地址{{ item.distance }}米</view>
+        </view>
+        <view class="list-cell-ft router">
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{selected == 1}}" class="list-group" style="margin-top: 10px;">
+      <view bindtap="chooseStore" data-item="{{item}}" class="list-cell" wx:for="{{cityStoreList}}" wx:key="{{index}}">
+        <view class="list-cell-bd">
+          <view class="list-label">{{ item.storeName }}</view>
+          <view class="list-label-desc">{{item.storeAddress}}</view>
+          <!-- <view class="list-label-desc">距离当前定位地址{{ item.distance }}米</view> -->
+        </view>
+        <view class="list-cell-ft router">
+        </view>
+      </view>
+    </view>
+     <view wx:if="{{( selected == 0 && nearStoreList.length == 0) ||  (selected == 1 && cityStoreList.length == 0)}}" class="no-data">
+      <image src="/static/images/tip-null.png"></image>
+      <text>暂无门店信息</text>
+    </view>
+  </scroll-view>
+</view>

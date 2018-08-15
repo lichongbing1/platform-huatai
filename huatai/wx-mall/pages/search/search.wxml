@@ -1,0 +1,118 @@
+<scroll-view class="container" style="height: 100%;">
+  <view class="cart-panel" wx:if="{{footCart.goodsCount>0}}">
+    <view class="cart-icon">
+      <navigator class="nav-cell" open-type='switchTab' url="/pages/cart/cart">
+        <image src="../../static/images/cart-fixed.png">
+        </image>
+      </navigator>
+      <view class="cart-num">{{footCart.goodsCount}}</view>
+    </view>
+    <view class="cart-body">￥{{footCart.checkedGoodsAmount}}</view>
+    <navigator class="nav-cell" open-type='switchTab' url="/pages/cart/cart">
+      <view class="cart-pay">去结算 > </view>
+    </navigator>
+  </view>
+  <view wx:if="{{showNavList}}" class="modal-wrap"></view>
+  <view class="fast-nav">
+    <contact-button wx:if="{{!showNavList}}" class="contact" size="25" type="primary" session-from="weapp">
+      <text>找客服</text>
+    </contact-button>
+    <view wx:if="{{!showNavList}}" class="nav" bindtap="toggleNav">
+      <text>快捷</text>
+      <text>导航</text>
+    </view>
+    <view class="nav-list" wx:if="{{showNavList}}">
+      <view class="nav-item">
+        <text class="nav-text">首页</text>
+        <view class="nav-cell" bindtap="switchNav" data-name="index">
+          <image src="../../static/images/nav-1.png"></image>
+        </view>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">足迹</text>
+        <navigator class="nav-cell" url="../ucenter/footprint/footprint">
+          <image src="../../static/images/nav-2.png"></image>
+        </navigator>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">搜索</text>
+        <navigator class="nav-cell" url="../search/search">
+          <image src="../../static/images/nav-3.png"></image>
+        </navigator>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">购物车</text>
+        <view class="nav-cell" bindtap="switchNav" data-name="cart">
+          <image src="../../static/images/nav-4.png"></image>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{showNavList}}" class="close" bindtap="toggleNav">X</view>
+  </view>
+  <view class="search-header">
+    <view class="input-box">
+      <image class="icon" src="/static/images/search.png"></image>
+      <input name="input" class="keywrod" focus="true" value="{{keyword}}" confirm-type="search" bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword.keyword}}" />
+      <image class="del" wx:if="{{keyword}}" bindtap="clearKeyword" src="/static/images/clear.png"></image>
+    </view>
+    <view class="right" bindtap="closeSearch">取消</view>
+  </view>
+  <view class="no-search" wx:if="{{ !searchStatus}}">
+    <view class="serach-keywords search-history" wx:if="{{!keyword  && historyKeyword.length}}">
+      <view class="h">
+        <text class="title">历史记录</text>
+        <image class="icon" bindtap="clearHistory" src="/static/images/delete.png"></image>
+      </view>
+      <view class="b">
+        <view class="item" bindtap="onKeywordTap" data-keyword="{{item}}" wx:for="{{historyKeyword}}" hover-class="navigator-hover">{{item}}</view>
+      </view>
+    </view>
+    <!-- <view class="serach-keywords search-hot" wx:if="{{!keyword}}">
+      <view class="h">
+        <text class="title">热门搜索</text>
+      </view>
+      <view class="b">
+        <view class="item {{item.is_hot === 1 ? 'active' : ''}}" hover-class="navigator-hover" bindtap="onKeywordTap" data-keyword="{{item.keyword}}" wx:for="{{hotKeyword}}" wx:key="{{index}}">{{item.keyword}}</view>
+      </view>
+    </view>
+    <view class="shelper-list" wx:if="{{keyword}}">
+      <view class="item" hover-class="navigator-hover" wx:for="{{helpKeyword}}" bindtap="onKeywordTap" data-keyword="{{item}}">{{item}}</view>
+    </view>-->
+  </view>
+
+  <view class="search-result" wx:if="{{ searchStatus && goodsList.length}}">
+    <view class="sort">
+      <view class="sort-box">
+        <view class="item {{currentSortType == 'default' ? 'active' : ''}}" bindtap="openSortFilter" id="defaultSort">
+          <text class="txt">综合</text>
+        </view>
+        <view class="item by-price {{currentSortType == 'price' ? 'active' : ''}} {{currentSortOrder == 'asc'  ? 'asc' : 'desc'}}" bindtap="openSortFilter" id="priceSort">
+          <text class="txt">价格</text>
+        </view>
+        <view class="item {{currentSortType == 'category' ? 'active' : ''}}" bindtap="openSortFilter" id="categoryFilter">
+          <text class="txt">分类</text>
+        </view>
+      </view>
+      <view class="sort-box-category" wx-if="{{categoryFilter}}">
+        <view class="item {{item.checked ? 'active' : ''}}" wx:for="{{filterCategory}}" wx:key="cate-{{item.id}}" data-category-index="{{index}}" bindtap="selectCategory">{{item.name}}</view>
+      </view>
+    </view>
+    <view class="cate-item">
+      <view class="b">
+        <navigator class="item {{(iindex + 1) % 2 == 0 ? 'item-b' : ''}}" url="/pages/goods/goods?id={{iitem.id}}" wx:for="{{goodsList}}" wx:for-item="iitem" wx:for-index="iindex">
+          <image class="img" src="{{iitem.list_pic_url}}" background-size="cover"></image>
+          <text class="name">{{iitem.name}}</text>
+          <text class="goods-do">
+        <text class="price">￥{{iitem.retail_price}}</text>
+          <text class="org-price line-through">￥{{iitem.market_price}}</text>
+          </text>
+        </navigator>
+      </view>
+    </view>
+  </view>
+
+  <view class="search-result-empty" wx:if="{{!goodsList.length && searchStatus}}">
+    <image class="icon" src="/static/images/no-search.png"></image>
+    <text class="text">您寻找的商品还未上架</text>
+  </view>
+</scroll-view>

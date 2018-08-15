@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiGoodsGroupOpenMapper">
+
+    <resultMap type="com.platform.entity.GoodsGroupOpenVo" id="goodsGroupOpenMap">
+        <result property="id" column="id"/>
+        <result property="group_id" column="group_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="open_time" column="open_time"/>
+        <result property="end_time" column="end_time"/>
+        <result property="attend_status" column="attend_status"/>
+        <result property="attend_num" column="attend_num"/>
+        <result property="title" column="title"/>
+        <result property="item_pic_url" column="item_pic_url"/>
+        <result property="market_price" column="market_price"/>
+        <result property="goods_id" column="goods_id"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="retail_min_price" column="retail_min_price"/>
+        <result property="min_open_group" column="min_open_group"/>
+        <result property="avatar" column="avatar"/>
+        <result property="nickname" column="nickname"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="goodsGroupOpenMap">
+		select
+		a.`id`,
+		a.`group_id`,
+		a.`user_id`,
+		a.`open_time`,
+		a.`end_time`,
+		a.`attend_status`,
+		a.`attend_num`,
+        b.title,
+        b.`item_pic_url`,
+        c.`market_price`,
+        b.`goods_id`,
+        b.`subtitle`,
+        b.`min_open_group`,
+        b.`retail_min_price`,
+        d.avatar,
+        d.nickname
+		from mall_goods_group_open a
+		left join mall_goods_group b on a.group_id = b.id
+		left join mall_goods c on c.id = b.goods_id
+		left join mall_user d on d.id = a.user_id
+		where a.id = #{id}
+	</select>
+
+    <select id="queryList" resultMap="goodsGroupOpenMap">
+        select a.`id`,
+        a.`group_id`,
+        a.`user_id`,
+        a.`open_time`,
+        a.`end_time`,
+        a.`attend_status`,
+        a.`attend_num`,
+        b.title,
+        b.`item_pic_url`,
+        c.`market_price`,
+        b.`goods_id`,
+        b.`subtitle`,
+        b.`min_open_group`,
+        b.`retail_min_price`,
+        d.avatar,
+        d.nickname
+        from mall_goods_group_open a
+        left join mall_goods_group b on a.group_id = b.id
+        left join mall_goods c on c.id = b.goods_id
+        left join mall_user d on d.id = a.user_id
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND a.name LIKE concat('%',#{name},'%')
+        </if>
+        <if test="group_id != null">
+            AND a.group_id = #{group_id}
+        </if>
+        <if test="end_time != null">
+            AND a.end_time > #{end_time}
+        </if>
+        <if test="attend_status != null">
+            AND a.attend_status = #{attend_status}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by a.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_goods_group_open
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.GoodsGroupOpenVo" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_goods_group_open(
+		`group_id`,
+		`user_id`,
+		`open_time`,
+		`end_time`,
+		`attend_status`,
+		`attend_num`)
+		values(
+		#{group_id},
+		#{user_id},
+		#{open_time},
+		#{end_time},
+		#{attend_status},
+		#{attend_num})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.GoodsGroupOpenVo">
+        update mall_goods_group_open
+        <set>
+            <if test="group_id != null">`group_id` = #{group_id},</if>
+            <if test="user_id != null">`user_id` = #{user_id},</if>
+            <if test="open_time != null">`open_time` = #{open_time},</if>
+            <if test="end_time != null">`end_time` = #{end_time},</if>
+            <if test="attend_status != null">`attend_status` = #{attend_status},</if>
+            <if test="attend_num != null">`attend_num` = #{attend_num}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_goods_group_open where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_goods_group_open where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,22 @@
+<view class="container">
+  <view class="form-box">
+
+    <view class="form-item">
+      <input class="phone" value="{{phone}}" type="number" maxlength="{{11}}" bindinput="bindPhoneInput" placeholder="手机号" auto-focus/>
+      <image wx:if="{{ phone.length > 0 }}" id="clear-phone" class="clear" src="/static/images/clear_input.png" catchtap="clearPhone"></image>
+    </view>
+
+    <view class="form-item-code">
+      <view class="form-item code-item">
+        <input class="smscode" value="{{smscode}}" type="number" bindinput="bindSmscodeInput" placeholder="短信码" />
+        <image class="clear" id="clear-smscode" wx:if="{{ smscode.length > 0 }}" src="/static/images/clear_input.png" catchtap="clearCode"></image>
+      </view>
+
+      <view class="sms-rr">
+          <button class="btn" disabled="{{disabled}}" catchtap="smscode" >{{second}}</button>
+      </view>
+
+    </view>
+  </view>
+  <button type="primary" class="login-btn" bindtap="getCoupon">提交</button>
+</view>

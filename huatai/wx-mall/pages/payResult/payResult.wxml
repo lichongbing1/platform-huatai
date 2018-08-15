@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="pay-result">
+    <view class="success" wx:if="{{status}}">
+      <view class="msg">付款成功</view>
+       <view class="tips">
+         <view class="p">分享即可领取红包</view>
+       </view>
+      <view class="btns">
+        <navigator class="btn" url="/pages/ucenter/order/order" open-type="redirect">查看订单</navigator>
+        <navigator class="btn" url="/pages/index/index" open-type="switchTab">继续逛</navigator>
+      </view>
+    </view>
+    <view class="error" wx:if="{{!status}}">
+      <view class="msg">付款失败</view>
+      <view class="tips">
+        <view class="p">请在 <text class="time">十分钟</text> 内完成付款</view>
+        <!-- <view class="p">否则订单将会被系统取消</view> -->
+      </view>
+      <view class="btns">
+        <navigator class="btn" url="/pages/ucenter/order/order" open-type="redirect">查看订单</navigator>
+        <navigator class="btn" url="/pages/pay/pay?orderId={{orderId}}&actualPrice={{orderInfo.actual_price}}" open-type="redirect">重新付款</navigator>
+      </view>
+    </view>
+  </view>
+
+   <view class="order-goods" wx:if="{{orderGoods}}">
+    <view class="h">
+      <view class="label">商品信息</view>
+    </view>
+    <view class="goods">
+      <view class="item" wx:for="{{orderGoods}}" wx:key="{{item.id}}">
+        <view class="img">
+          <image src="{{item.list_pic_url}}"></image>
+        </view>
+        <view class="info">
+          <view class="t">
+            <text class="name">{{item.goods_name}}</text>
+            <text class="number">x{{item.number}}</text>
+          </view>
+          <view class="attr">{{null==item.goods_specification_name_value?"":item.goods_specification_name_value}}</view>
+          <view class="price">￥{{item.retail_price}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+ <view class="coupon" wx:if="{{status && openCoupon}}">
+   <view class="attr-close" bindtap="closeCoupon">X</view>
+    <image class="img" src="/static/imgys/coupon-gun.png" bindtap="shareCoupon"/>
+  </view>
+
+</view>

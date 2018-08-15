@@ -1,0 +1,124 @@
+<view class="container">
+  <view class="service-policy">
+    <view class="item">30分钟速达</view>
+    <view class="item">每日优选生鲜</view>
+    <view class="item">满88元免配送费</view>
+  </view> 
+  <view class="no-cart" wx:if="{{cartGoods.length <= 0}}">
+    <view class="c">
+      <view class="title-box">
+        购物车空空如也～
+      </view>
+      <view class="to-index-btn" bindtap="toIndexPage">
+        去逛逛
+      </view>
+    </view>
+  </view>
+  <view class="cart-view" wx:if="{{cartGoods.length > 0}}">
+    <view class="group-item" wx:if="{{couponInfoList.length > 0}}">
+      <view class="coupon-info header" wx:for="{{couponInfoList}}" wx:key="{{item}}">
+        <text class="txt" wx:if="{{item.type===0}}">{{item.msg}}</text>
+        <navigator wx:if="{{item.type===1}}" url="../catalog/catalog" open-type="switchTab">
+          <text class="txt">{{item.msg}}，去凑单></text>
+        </navigator>
+      </view>
+    </view>
+    <view class="list">
+      <view class="group-item">
+        <view class="goods">
+          <view class="item" wx:for="{{cartGoods}}" wx:key="{{item.id}}">
+            <view class="checkbox {{item.checked ? 'checked' : ''}}" bindtap="checkedItem" data-item-index="{{index}}"></view>
+            <view class="cart-goods">
+              <navigator url="/pages/goods/goods?id={{item.goods_id}}">
+                <image class="img" src="{{item.list_pic_url}}"></image>
+              </navigator>
+              <view class="info">
+                <view class="t">
+                  <navigator url="/pages/goods/goods?id={{item.goods_id}}">
+                    <text class="name">{{item.goods_name}}</text>
+                  </navigator>
+                  <view class="goods-do">
+                    <text class="price">￥{{item.retail_price}}</text>
+                    <text class="org-price line-through">￥{{item.market_price}}</text>
+                  </view>
+                </view>
+                <view class="attr">{{null==item.goods_specification_name_value?"":item.goods_specification_name_value}}
+                </view>
+                <!-- //数量加减 -->
+                <view class="number-item">
+                  <view class="selnum">
+                    <view class="cut" data-goods-id="{{item.id}}" data-item-index="{{index}}" data-product-id="{{item.product_id}}" bindtap="cutNumber"></view>
+                    <input value="{{item.number}}" class="number" disabled="true" type="number" />
+                    <view class="add" data-goods-id="{{item.id}}" data-item-index="{{index}}" data-product-id="{{item.product_id}}" bindtap="addNumber"></view>
+                  </view>
+                </view>
+                <view class="handle">
+                  <image catchtap="deleteCart" data-cart-id="{{item.id}}" data-goods-name="{{item.goods_name}}" class="del" src="/static/images/del-address.png"></image>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="a-guess" wx:if="{{footprintList.length > 0}}">
+      <view class="h">
+        <view>
+          <text class="txt">猜你喜欢</text>
+        </view>
+      </view>
+      <view class="b">
+        <block wx:for="{{footprintList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="unique">
+          <navigator wx:if="{{iitem.retail_price > 0}}" class="item {{iindex % 2 == 0 ? 'item-b' : '' }}" url="../goods/goods?id={{iitem.goods_id}}">
+            <image class="img2" src="{{iitem.list_pic_url}}" background-size="cover"></image>
+            <text class="name">{{iitem.name}}</text>
+            <view class="price">￥{{iitem.retail_price}}
+              <image data-goods-id="{{iitem.goods_id}}" catchtap='addCart' class="cart" src="/static/images/cart.png" background-size="cover"></image>
+            </view>
+          </navigator>
+        </block>
+      </view>
+
+       <view wx:if="{{openAttr}}" class="attr-pop">
+              <view class="attr-close" bindtap="switchAttrPop">X</view>
+              <view class="img-info">
+                <image class="img" src="{{goodsVo.list_pic_url}}"></image>
+                <view class="info">
+                  <view class="c">
+                    <view class="p">价格：￥{{checkedProduct[0].retail_price}}</view>
+                    <view class="a" wx:if="{{productList.length>0}}">已选择：{{checkedSpecText}}</view>
+                  </view>
+                </view>
+              </view>
+              <view class="spec-con">
+                <view class="spec-item" wx:for="{{specificationList}}" wx:key="{{item.specification_id}}"  wx:for-index="itemIndex">
+                  <view class="name">{{item.name}}</view>
+                  <view class="values">
+                    <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.valueList}}" wx:for-item="vitem" wx:key="{{vitem.id}}"   data-index="{{itemIndex}}"
+                     data-value-id="{{vitem.id}}" data-name-id="{{vitem.specification_id}}">{{vitem.value}}</view>
+                  </view>
+                </view>
+
+                <view class="number-item">
+                  <view class="name">数量</view>
+                  <view class="selnum">
+                    <view class="cut" bindtap="cutNumber2">-</view>
+                    <input value="{{number}}" class="number" disabled="true" type="number" />
+                    <view class="add" bindtap="addNumber2">+</view>
+                  </view>
+                </view>
+              </view>
+                <view class="bottom-btn">
+               <view class="r" bindtap="addToCart">加入购物车</view>
+                </view>
+            </view>
+    </view>
+
+    <view class="cart-bottom">
+      <view class="checkbox {{checkedAllStatus ? 'checked' : ''}}" bindtap="checkedAll">全选({{cartTotal.checkedGoodsCount}})</view>
+      <view class="total">{{'￥'+cartTotal.checkedGoodsAmount}}</view>
+      <view class="checkout" bindtap="checkoutOrder" wx:if="{{!isEditCart}}">下单</view>
+    </view>
+  </view>
+</view>

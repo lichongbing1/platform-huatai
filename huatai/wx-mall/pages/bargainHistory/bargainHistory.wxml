@@ -1,0 +1,29 @@
+<view class="container">
+  <scroll-view class="topic-list" scroll-y="true" scroll-top="{{scrollTop}}">
+    <view class="item" wx:for="{{bargainList}}" wx:key="{{item.id}}">
+      <view class="imgtt">
+        <image class="img" src="{{item.item_pic_url}}"></image>
+        <view class="imgline">
+          <view class="priceInfo">最低砍购价：
+            <text class="price">￥{{item.retail_price}}</text>
+            <text class="orgPrice line-through">￥{{item.market_price}}</text>
+          </view>
+          <view class="right">
+            <navigator url="../bargainDetail/bargainDetail?bargainId={{item.id}}">
+              <button class="btn">查看详情</button>
+            </navigator>
+          </view>
+        </view>
+      </view>
+      <view class="info">
+        <text class="title">{{item.title}}</text>
+        <text class="desc">{{item.subtitle}}</text>
+      </view>
+    </view>
+    <view class="page" wx:if="{{showPage}}">
+      <view class="prev {{ page <= 1 ? 'disabled' : ''}}" bindtap="prevPage">上一页</view>
+      <view class="next {{ (count / size) < page +1 ? 'disabled' : ''}}" bindtap="nextPage">下一页</view>
+    </view>
+  </scroll-view>
+
+</view>

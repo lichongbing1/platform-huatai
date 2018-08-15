@@ -1,0 +1,26 @@
+<view class="container">
+  <view class="help">使用说明</view>
+  <view style="margin: 5px 10px;" wx:for="{{couponList}}" wx:key="{{item.id}}" bindtap="selectCoupon" data-user-coupon-id="{{item.id}}">
+    <view class="coupon-box coupon-box1 coupon-box-g">
+      <view class="coupon-bg {{item.enabled == 0? 'coupon-bg2' : 'coupon-bg1'}}">
+        <view>
+          <text class="coupon-currency">￥</text>{{ item.type_money }}</view>
+        <view class="coupon-type" wx:if="{{item.send_type == 4}}">新人专享</view>
+        <view class="coupon-type" wx:if="{{item.send_type == 0}}">满减</view>
+      </view>
+      <view class="coupon-info">
+        <view class="coupon-title">{{ item.coupon_name }}</view>
+        <view class="coupon-desc">
+          <view>{{ item.add_time }}-{{ item.end_time }}</view>
+          <view>{{ null!=item.coupon_txt?item.coupon_txt:"" }}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+    <view class="empty-view" wx:if="{{ couponList.length <= 0 }}">
+      <view class="no-data">
+        <image src="/static/images/tip-null.png"></image>
+        <text>暂无可用优惠券</text>
+      </view>
+    </view>
+</view>

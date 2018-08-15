@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.SysNoticeDao">
+
+    <resultMap type="com.platform.entity.SysNoticeEntity" id="sysNoticeMap">
+        <result property="id" column="id"/>
+        <result property="context" column="context"/>
+        <result property="title" column="title"/>
+        <result property="soucre" column="soucre"/>
+        <result property="status" column="status"/>
+        <result property="isUrgent" column="is_urgent"/>
+        <result property="releaseTimee" column="release_timee"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createId" column="create_id"/>
+        <result property="updateId" column="update_id"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.platform.entity.SysNoticeEntity">
+		select
+			`id`,
+			`context`,
+			`title`,
+			`soucre`,
+			`status`,
+			`is_urgent`,
+			`release_timee`,
+			`create_time`,
+			`update_time`,
+			`create_id`,
+			`update_id`,
+			`remark`
+		from sys_notice
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.platform.entity.SysNoticeEntity">
+		select
+    		`id`,
+    		`context`,
+    		`title`,
+    		`soucre`,
+    		`status`,
+    		`is_urgent`,
+    		`release_timee`,
+    		`create_time`,
+    		`update_time`,
+    		`create_id`,
+    		`update_id`,
+    		`remark`
+		from sys_notice
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_notice
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.platform.entity.SysNoticeEntity">
+		insert into sys_notice(
+			`id`,
+			`context`,
+			`title`,
+			`soucre`,
+			`status`,
+			`is_urgent`,
+			`release_timee`,
+			`create_time`,
+			`update_time`,
+			`create_id`,
+			`update_id`,
+			`remark`)
+		values(
+			#{id},
+			#{context},
+			#{title},
+			#{soucre},
+			#{status},
+			#{isUrgent},
+			#{releaseTimee},
+			#{createTime},
+			#{updateTime},
+			#{createId},
+			#{updateId},
+			#{remark})
+	</insert>
+	 
+	<update id="update" parameterType="com.platform.entity.SysNoticeEntity">
+		update sys_notice 
+		<set>
+			<if test="context != null">`context` = #{context}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="soucre != null">`soucre` = #{soucre}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="isUrgent != null">`is_urgent` = #{isUrgent}, </if>
+			<if test="releaseTimee != null">`release_timee` = #{releaseTimee}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="createId != null">`create_id` = #{createId}, </if>
+			<if test="updateId != null">`update_id` = #{updateId}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sys_notice where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sys_notice where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

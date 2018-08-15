@@ -1,0 +1,124 @@
+page ,.container{
+   width: 750rpx;
+    height: 100%;
+    overflow: hidden;
+    background: #f4f4f4;
+    position: relative;
+}
+
+.tab-bar{
+  height: 8vh;
+  display: flex;
+  line-height: 8vh;
+  background-color: #fff;
+}
+.tab-bar .tab-bar-item{
+  flex: 1;
+  text-align: center;
+  color: #555;
+  font-size: 30rpx;
+}
+.tab-bar .tab-bar-item.active{
+  color: #FF5778;
+  border-bottom: 1px solid #FF5778;
+}
+
+.group-panel{
+  width: 90%;
+  margin: 20rpx auto;
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.16);
+}
+
+.group-panel .panel-head{
+  height: 100rpx;
+  line-height: 100rpx;
+  padding: 0 20rpx;
+  background-color: #F9F9F9;
+}
+
+.group-panel .panel-head .desc{
+  float: left;
+  color: #FF5778;
+  font-size: 30rpx;
+}
+
+.group-panel .panel-head .deadline{
+  float: right;
+  color: #999;
+}
+
+.group-panel .panel-body{
+  background-color: #fff;
+}
+
+.group-panel .panel-body .title{
+  height: 100rpx;
+  font-size: 30rpx;
+  padding: 20rpx;
+}
+
+.group-panel .panel-body .box{
+  display: flex;
+  padding: 20rpx;
+}
+
+.group-panel .panel-body .box .l{
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.group-panel .panel-body .box .m{
+  width: 330rpx;
+  padding: 0 20rpx;
+}
+
+.group-panel .panel-body .box .m .attr{
+  color: #999;
+  padding-top: 10rpx;
+}
+.group-panel .panel-body .box .r .price{
+  color: #999;
+  text-decoration: line-through;
+}
+
+.group-panel .panel-body .box .r .num{
+  color: #999;
+  padding-left: 10rpx;
+}
+
+.group-panel .panel-foot{
+  background-color: #fff;
+  margin-top: 1px;
+}
+
+.group-panel .panel-foot .desc{
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: right;
+  padding-right: 20rpx;
+}
+
+.group-panel .btn-group{
+  background-color: #fff;
+  margin-top: 1px;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.group-panel .btn-group .btn{
+  width: 200rpx;
+  height: 60rpx;
+  font-size: 25rpx;
+  margin: 0 20rpx;
+  line-height: 60rpx
+}
+
+.group-panel .btn-group .btn.btn-l{
+  background-color: #fff;
+}
+.group-panel .btn-group .btn.btn-r{
+  background-color: #FF5778;
+  color: #fff;
+}

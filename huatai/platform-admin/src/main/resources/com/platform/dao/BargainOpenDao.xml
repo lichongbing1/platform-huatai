@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.BargainOpenDao">
+
+    <resultMap type="com.platform.entity.BargainOpenEntity" id="bargainOpenMap">
+        <result property="id" column="id"/>
+        <result property="bargainId" column="bargain_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="launchTime" column="launch_time"/>
+        <result property="orderId" column="order_id"/>
+        <result property="launchStatus" column="launch_status"/>
+        <result property="retailPrice" column="retail_price"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.BargainOpenEntity">
+		select
+			`id`,
+			`bargain_id`,
+			`user_id`,
+			`launch_time`,
+			`order_id`,
+			`launch_status`,
+			`retail_price`
+		from mall_bargain_open
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.BargainOpenEntity">
+        select
+        mall_bargain_open.id,
+        mall_bargain_open.bargain_id,
+        mall_bargain_open.user_id,
+        mall_bargain_open.launch_time,
+        mall_bargain_open.order_id,
+        mall_bargain_open.launch_status,
+        mall_bargain_open.retail_price,
+        mall_user.username user_name
+        from mall_bargain_open
+        LEFT JOIN mall_user on mall_user.id = mall_bargain_open.user_id
+        WHERE 1=1
+        <if test="userName != null and userName.trim() != ''">
+            AND mall_user.username = #{userName}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_bargain_open
+        LEFT JOIN mall_user on mall_user.id = mall_bargain_open.user_id
+        WHERE 1=1
+        <if test="userName != null and userName.trim() != ''">
+            AND mall_user.username = #{userName}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.BargainOpenEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_bargain_open(
+			`bargain_id`,
+			`user_id`,
+			`launch_time`,
+			`order_id`,
+			`launch_status`,
+			`retail_price`)
+		values(
+			#{bargainId},
+			#{userId},
+			#{launchTime},
+			#{orderId},
+			#{launchStatus},
+			#{retailPrice})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.BargainOpenEntity">
+        update mall_bargain_open
+        <set>
+            <if test="bargainId != null">`bargain_id` = #{bargainId},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="launchTime != null">`launch_time` = #{launchTime},</if>
+            <if test="orderId != null">`order_id` = #{orderId},</if>
+            <if test="launchStatus != null">`launch_status` = #{launchStatus},</if>
+            <if test="retailPrice != null">`retail_price` = #{retailPrice}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_bargain_open where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_bargain_open where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

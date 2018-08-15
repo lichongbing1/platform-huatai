@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiBargainOpenRecordMapper">
+
+    <resultMap type="com.platform.entity.BargainOpenRecordVo" id="bargainOpenRecordMap">
+        <result property="id" column="id"/>
+        <result property="open_id" column="open_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="bargain_price" column="bargain_price"/>
+        <result property="bargain_time" column="bargain_time"/>
+        <result property="avatar" column="avatar"/>
+        <result property="nickname" column="nickname"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="bargainOpenRecordMap">
+		select
+			a.`id`,
+			a.`open_id`,
+			a.`user_id`,
+			a.`bargain_price`,
+			a.`bargain_time`,
+            d.avatar,
+            d.nickname
+		from mall_bargain_open_record a
+		LEFT JOIN mall_user d ON d.id = a.user_id
+		where a.id = #{id}
+	</select>
+
+    <select id="queryList" resultMap="bargainOpenRecordMap">
+        select
+        a.`id`,
+        a.`open_id`,
+        a.`user_id`,
+        a.`bargain_price`,
+        a.`bargain_time`,
+        d.avatar,
+        d.nickname
+        from mall_bargain_open_record a
+        LEFT JOIN mall_user d ON d.id = a.user_id
+        WHERE 1=1
+        <if test="open_id != null">
+            AND a.open_id = #{open_id}
+        </if>
+        <if test="user_id != null">
+            AND a.user_id = #{user_id}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by a.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_bargain_open_record
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.BargainOpenRecordVo">
+		insert into mall_bargain_open_record(
+			`id`,
+			`open_id`,
+			`user_id`,
+			`bargain_price`,
+			`bargain_time`)
+		values(
+			#{id},
+			#{open_id},
+			#{user_id},
+			#{bargain_price},
+			#{bargain_time})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.BargainOpenRecordVo">
+        update mall_bargain_open_record
+        <set>
+            <if test="open_id != null">`open_id` = #{open_id},</if>
+            <if test="user_id != null">`user_id` = #{user_id},</if>
+            <if test="bargain_price != null">`bargain_price` = #{bargain_price},</if>
+            <if test="bargain_time != null">`bargain_time` = #{bargain_time}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_bargain_open_record where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_bargain_open_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

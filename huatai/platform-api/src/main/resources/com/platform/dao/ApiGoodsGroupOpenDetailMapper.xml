@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiGoodsGroupOpenDetailMapper">
+
+    <resultMap type="com.platform.entity.GoodsGroupOpenDetailVo" id="goodsGroupOpenDetailMap">
+        <result property="id" column="id"/>
+        <result property="open_id" column="open_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="attend_time" column="attend_time"/>
+        <result property="attend_status" column="attend_status"/>
+        <result property="avatar" column="avatar"/>
+        <result property="nickname" column="nickname"/>
+        <result property="open_time" column="open_time"/>
+        <result property="end_time" column="end_time"/>
+        <result property="attend_status" column="attend_status"/>
+        <result property="attend_num" column="attend_num"/>
+        <result property="title" column="title"/>
+        <result property="item_pic_url" column="item_pic_url"/>
+        <result property="abbr_pic_url" column="abbr_pic_url"/>
+        <result property="market_price" column="market_price"/>
+        <result property="goods_id" column="goods_id"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="retail_min_price" column="retail_min_price"/>
+        <result property="min_open_group" column="min_open_group"/>
+        <result property="order_price" column="order_price"/>
+        <result property="goods_specification_name_value" column="goods_specification_name_value"/>
+        <result property="open_attend_status" column="open_attend_status"/>
+        <result property="retail_price" column="retail_price"/>
+        <result property="number" column="number"/>
+        <result property="group_id" column="group_id"/>
+        <result property="order_id" column="order_id"/>
+        <result property="actual_price" column="actual_price"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="goodsGroupOpenDetailMap">
+		SELECT
+            a.`id`,
+            a.`open_id`,
+            a.`user_id`,
+            a.`attend_time`,
+            a.`attend_status`,
+            b.`group_id`,
+            g.title,
+            g.`item_pic_url`,
+            g.`abbr_pic_url`,
+            c.`market_price`,
+            c.retail_price,
+            o.order_price,
+            o.actual_price,
+            g.`goods_id`,
+            g.`subtitle`,
+            g.`min_open_group`,
+            g.`retail_min_price`,
+            b.`attend_status` AS open_attend_status,
+            b.`attend_num`,
+            b.`open_time`,
+            b.`end_time`,
+            og.goods_specification_name_value,
+            og.number,
+            o.id as order_id,
+            d.avatar,
+            d.nickname
+        FROM
+            mall_goods_group_open_detail a
+        LEFT JOIN mall_goods_group_open b ON a.open_id = b.id
+        LEFT JOIN mall_goods_group g ON g.id = b.group_id
+        LEFT JOIN mall_goods c ON c.id = g.goods_id
+        LEFT JOIN mall_user d ON d.id = a.user_id
+        LEFT JOIN mall_order o ON o.activity_id = a.id and o.order_type  = 2
+        LEFT JOIN mall_order_goods og ON og.order_id = o.id
+		where a.id = #{id}
+	</select>
+
+    <select id="queryList" resultMap="goodsGroupOpenDetailMap">
+        SELECT
+        a.`id`,
+        a.`open_id`,
+        a.`user_id`,
+        a.`attend_time`,
+        a.`attend_status`,
+        b.`group_id`,
+        g.title,
+        g.`item_pic_url`,
+        g.`abbr_pic_url`,
+        c.`market_price`,
+        c.retail_price,
+        o.order_price,
+        o.actual_price,
+        g.`goods_id`,
+        g.`subtitle`,
+        g.`min_open_group`,
+        g.`retail_min_price`,
+        b.`attend_status` AS open_attend_status,
+        b.`attend_num`,
+        b.`open_time`,
+        b.`end_time`,
+        og.goods_specification_name_value,
+        og.number,
+        o.id as order_id,
+        d.avatar,
+        d.nickname
+        FROM
+        mall_goods_group_open_detail a
+        LEFT JOIN mall_goods_group_open b ON a.open_id = b.id
+        LEFT JOIN mall_goods_group g ON g.id = b.group_id
+        LEFT JOIN mall_goods c ON c.id = g.goods_id
+        LEFT JOIN mall_user d ON d.id = a.user_id
+        LEFT JOIN mall_order o ON o.activity_id = a.id and o.order_type  = 2
+        LEFT JOIN mall_order_goods og ON og.order_id = o.id
+        WHERE 1=1
+        <if test="group_id != null">
+            AND a.group_id = #{group_id}
+        </if>
+        <if test="open_id != null">
+            AND a.open_id = #{open_id}
+        </if>
+        <if test="attend_status != null">
+            AND a.attend_status = #{attend_status}
+        </if>
+        <if test="attend_statuss != null and attend_statuss.length > 0">
+            and a.attend_status in
+            <foreach item="item" collection="attend_statuss" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="user_id != null">
+            AND a.user_id = #{user_id}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by a.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_goods_group_open_detail a
+        WHERE 1=1
+        <if test="open_id != null">
+            AND a.open_id = #{open_id}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.GoodsGroupOpenDetailVo" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_goods_group_open_detail(
+		`open_id`,
+		`user_id`,
+		`attend_time`,
+		`attend_status`)
+		values(
+		#{open_id},
+		#{user_id},
+		#{attend_time},
+		#{attend_status})
+	</insert>
+
+    <update id="updateComplete">
+        update mall_goods_group_open_detail
+        set attend_status = 2
+        where 1 = 1 and attend_status = 1
+        AND open_id = #{open_id}
+    </update>
+
+
+    <update id="update" parameterType="com.platform.entity.GoodsGroupOpenDetailVo">
+        update mall_goods_group_open_detail
+        <set>
+            <if test="open_id != null">`open_id` = #{open_id},</if>
+            <if test="user_id != null">`user_id` = #{user_id},</if>
+            <if test="attend_time != null">`attend_time` = #{attend_time},</if>
+            <if test="attend_status != null">`attend_status` = #{attend_status},</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.QzOrderMapper">
+    <select id="queryrderUnEvaluateList" resultType="map">
+       SELECT
+            a.id AS order_id,
+            a.order_sn,
+            c.goods_name,
+	        a.form_id,
+	        u.weixin_openid AS open_id
+        FROM
+            mall_order a
+        LEFT JOIN mall_comment b ON a.id = b.order_id
+        LEFT JOIN mall_order_goods c ON c.order_id = a.id
+        LEFT JOIN mall_user u ON a.user_id = u.id
+        WHERE
+            b.id IS NULL
+        AND a.confirm_time > date_add(now(), INTERVAL - 1 DAY)
+        AND a.confirm_time IS NOT NULL
+    </select>
+
+    <select id="queryPastOrderList" resultType="map">
+        SELECT b.product_id,b.number,c.stock_num,c.id as storeRelaId
+        FROM mall_order a
+        LEFT JOIN mall_order_goods b ON a.id = b.order_id
+        LEFT JOIN mall_product_store_rela c ON b.product_id = c.product_id
+        AND c.store_id = a.store_id
+        WHERE 1 = 1
+        AND a.add_time <![CDATA[ < ]]> DATE_ADD(now(),INTERVAL -10 MINUTE)
+        AND a.order_status = 0 and a.order_type = 1
+    </select>
+
+    <update id="unpayPastUpdate">
+        UPDATE mall_order a
+        SET order_status=101,shipping_status=0
+        WHERE 1 = 1
+        AND a.add_time <![CDATA[ <  ]]> DATE_ADD(now(),INTERVAL -10 MINUTE)
+        AND a.order_status = 0  and a.order_type = 1
+    </update>
+
+    <update id="updateStockNum" parameterType="map">
+        update mall_product_store_rela a
+        <set>
+            <if test="stock_num != null">a.`stock_num` = #{stock_num},</if>
+        </set>
+        where a.id = #{id}
+    </update>
+
+</mapper>

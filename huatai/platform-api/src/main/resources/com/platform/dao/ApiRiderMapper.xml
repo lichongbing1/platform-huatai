@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiRiderMapper">
+
+    <resultMap type="com.platform.entity.RiderVo" id="riderMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="idcard" column="idcard"/>
+        <result property="idcardPicUrl" column="idcard_pic_url"/>
+        <result property="mobile" column="mobile"/>
+        <result property="userId" column="user_id"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.RiderVo">
+		select
+			`id`,
+			`name`,
+			`idcard`,
+			`idcard_pic_url`,
+			`mobile`,
+			`user_id`,
+			`remark`,
+			`create_by`,
+			`create_time`,
+			`latitude`,
+			`longitude`
+		from mall_rider
+		where id = #{id}
+	</select>
+
+    <select id="queryByUserId" resultType="com.platform.entity.RiderVo">
+        select
+        `id`,
+        `name`,
+        `idcard`,
+        `idcard_pic_url`,
+        `mobile`,
+        `user_id`,
+        `remark`,
+        `create_by`,
+        `create_time`,
+        `latitude`,
+        `longitude`
+        from mall_rider
+        where user_id = #{userId}
+    </select>
+
+    <select id="queryList" resultType="com.platform.entity.RiderVo">
+        select
+        `id`,
+        `name`,
+        `idcard`,
+        `idcard_pic_url`,
+        `mobile`,
+        `user_id`,
+        `remark`,
+        `create_by`,
+        `create_time`,
+        `latitude`,
+        `longitude`
+        from mall_rider
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_rider
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.RiderVo" useGeneratedKeys="true" keyProperty="id">
+        insert into mall_rider(
+			`name`,
+			`idcard`,
+			`idcard_pic_url`,
+			`mobile`,
+			`user_id`,
+			`remark`,
+			`create_by`,
+			`create_time`,
+			`latitude`,
+			`longitude`)
+		values(
+			#{name},
+			#{idcard},
+			#{idcardPicUrl},
+			#{mobile},
+			#{userId},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{latitude},
+			#{longitude})
+    </insert>
+
+    <update id="update" parameterType="com.platform.entity.RiderVo">
+        update mall_rider
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="idcard != null">`idcard` = #{idcard},</if>
+            <if test="idcardPicUrl != null">`idcard_pic_url` = #{idcardPicUrl},</if>
+            <if test="mobile != null">`mobile` = #{mobile},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="createBy != null">`create_by` = #{createBy},</if>
+            <if test="createTime != null">`create_time` = #{createTime}</if>
+            <if test="latitude != null">`latitude` = #{latitude},</if>
+            <if test="longitude != null">`longitude` = #{longitude}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateLocate" parameterType="com.platform.entity.RiderVo">
+        update mall_rider
+        <set>
+            <if test="latitude != null">`latitude` = #{latitude},</if>
+            <if test="longitude != null">`longitude` = #{longitude}</if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+</mapper>

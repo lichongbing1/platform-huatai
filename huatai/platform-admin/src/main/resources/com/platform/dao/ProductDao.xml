@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ProductDao">
+
+    <resultMap type="com.platform.entity.ProductEntity" id="productMap">
+        <result property="id" column="id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsSpecificationIds" column="goods_specification_ids"/>
+        <result property="goodsSpecificationNameValue" column="goods_specification_name_value"/>
+        <result property="goodsSn" column="goods_sn"/>
+        <result property="goodsNumber" column="goods_number"/>
+        <result property="goodsDefault" column="goods_default"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.ProductEntity">
+		select
+			id,
+			goods_id,
+			goods_specification_ids,
+			goods_specification_name_value,
+			goods_sn,
+			goods_number,
+			goods_default
+		from mall_product
+		where id = #{id}
+	</select>
+
+    <select id="queryObjectBySn" resultType="com.platform.entity.ProductEntity">
+        select
+        *
+        from mall_product
+        where goods_sn = #{goodsSn}
+    </select>
+
+    <select id="queryList" resultType="com.platform.entity.ProductEntity">
+        select
+        mall_product.*,
+        mall_goods.name goods_name
+        from mall_product
+        LEFT JOIN mall_goods ON mall_product.goods_id = mall_goods.id
+        WHERE 1=1
+        <if test="goodsId != null and goodsId != ''">
+            AND mall_product.goods_id = #{goodsId}
+        </if>
+        <if test="goodsSpecificationIds != null and goodsSpecificationIds != ''">
+            AND mall_product.goods_specification_ids = #{goodsSpecificationIds}
+        </if>
+        <if test="goodsName != null and goodsName.trim() != ''">
+            AND mall_goods.name LIKE concat('%',#{goodsName},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by mall_product.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_product
+        LEFT JOIN mall_goods ON mall_product.goods_id = mall_goods.id
+        WHERE 1=1
+        <if test="goodsId != null and goodsId != ''">
+            AND mall_product.goods_id = #{goodsId}
+        </if>
+        <if test="goodsName != null and goodsName.trim() != ''">
+            AND mall_goods.name LIKE concat('%',#{goodsName},'%')
+        </if>
+        <if test="goodsSpecificationIds != null and goodsSpecificationIds != ''">
+            AND mall_product.goods_specification_ids = #{goodsSpecificationIds}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.ProductEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_product(
+			`goods_id`,
+			`goods_specification_ids`,
+			`goods_specification_name_value`,
+			`goods_sn`,
+			`goods_number`,
+			`goods_default`
+			)
+		values(
+			#{goodsId},
+			#{goodsSpecificationIds},
+			#{goodsSpecificationNameValue},
+			#{goodsSn},
+			#{goodsNumber},
+			#{goodsDefault}
+			)
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.ProductEntity">
+        update mall_product
+        <set>
+            <if test="goodsId != null">`goods_id` = #{goodsId},</if>
+            <if test="goodsSpecificationIds != null">`goods_specification_ids` = #{goodsSpecificationIds},</if>
+            <if test="goodsSpecificationNameValue != null">`goods_specification_name_value` =
+                #{goodsSpecificationNameValue},
+            </if>
+            <if test="goodsSn != null">`goods_sn` = #{goodsSn},</if>
+            <if test="goodsNumber != null">`goods_number` = #{goodsNumber},</if>
+            <if test="goodsDefault != null">`goods_default` = #{goodsDefault},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_product where id = #{id}
+	</delete>
+
+    <delete id="deleteByGoodsId">
+        delete from mall_product where goods_id = #{goodsId}
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from mall_product where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

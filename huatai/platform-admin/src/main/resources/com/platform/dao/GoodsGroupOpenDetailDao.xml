@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.GoodsGroupOpenDetailDao">
+
+    <resultMap type="com.platform.entity.GoodsGroupOpenDetailEntity" id="goodsGroupOpenDetailMap">
+        <result property="id" column="id"/>
+        <result property="openId" column="open_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="attendTime" column="attend_time"/>
+        <result property="attendStatus" column="attend_status"/>
+        <result property="formId" column="form_id"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="goodsGroupOpenDetailMap">
+		select
+			`id`,
+			`open_id`,
+			`user_id`,
+			`attend_time`,
+			`attend_status`,
+			`form_id`
+		from mall_goods_group_open_detail
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultMap="goodsGroupOpenDetailMap">
+        select
+        `id`,
+        `open_id`,
+        `user_id`,
+        `attend_time`,
+        `attend_status`,
+        `form_id`
+        from mall_goods_group_open_detail
+        WHERE 1=1
+        <if test="openId != null">
+            AND open_id = #{openId}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_goods_group_open_detail
+        WHERE 1=1
+        <if test="open_id != null">
+            AND open_id = #{openId}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.GoodsGroupOpenDetailEntity" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into mall_goods_group_open_detail(
+			`open_id`,
+			`user_id`,
+			`attend_time`,
+			`attend_status`,
+			`form_id`)
+		values(
+			#{openId},
+			#{userId},
+			#{attendTime},
+			#{attendStatus},
+			#{formId})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.GoodsGroupOpenDetailEntity">
+        update mall_goods_group_open_detail
+        <set>
+            <if test="openId != null">`open_id` = #{openId},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="attendTime != null">`attend_time` = #{attendTime},</if>
+            <if test="attendStatus != null">`attend_status` = #{attendStatus},</if>
+            <if test="formId != null">`form_id` = #{formId}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_goods_group_open_detail where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_goods_group_open_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

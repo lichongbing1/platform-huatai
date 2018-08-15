@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.GoodsBargainDao">
+
+    <resultMap type="com.platform.entity.GoodsBargainEntity" id="goodsBargainMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="itemPicUrl" column="item_pic_url"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="bargainMoney" column="bargain_money"/>
+        <result property="retailMinPrice" column="retail_min_price"/>
+        <result property="openTime" column="open_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="abbrPicUrl" column="abbr_pic_url"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.GoodsBargainEntity">
+		select
+			`id`,
+			`title`,
+			`item_pic_url`,
+			`goods_id`,
+			`product_id`,
+			`subtitle`,
+			`bargain_money`,
+			`retail_min_price`,
+			`open_time`,
+			`end_time`,
+			`abbr_pic_url`,
+			`is_delete`
+		from mall_goods_bargain
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.GoodsBargainEntity">
+        select
+        mall_goods_bargain.id,
+        mall_goods_bargain.title,
+        mall_goods_bargain.item_pic_url,
+        mall_goods_bargain.goods_id,
+        mall_goods_bargain.product_id,
+        mall_goods_bargain.subtitle,
+        mall_goods_bargain.bargain_money,
+        mall_goods_bargain.retail_min_price,
+        mall_goods_bargain.open_time,
+        mall_goods_bargain.end_time,
+        mall_goods_bargain.abbr_pic_url,
+        mall_goods_bargain.is_delete,
+        mall_goods.name goods_name
+        from mall_goods_bargain
+        LEFT JOIN mall_goods ON mall_goods_bargain.goods_id = mall_goods.id
+        WHERE 1=1
+        <if test="title != null and title.trim() != ''">
+            AND mall_goods_bargain.title LIKE concat('%',#{title},'%')
+        </if>
+        <if test="goodsId != null and goodsId != ''">
+            AND mall_goods_bargain.goods_id = #{goodsId}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by mall_goods_bargain.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_goods_bargain
+        WHERE 1=1
+        <if test="title != null and title.trim() != ''">
+            AND title LIKE concat('%',#{title},'%')
+        </if>
+        <if test="goodsId != null and goodsId != ''">
+            AND mall_goods_bargain.goods_id = #{goodsId}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.GoodsBargainEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_goods_bargain(
+			`title`,
+			`item_pic_url`,
+			`goods_id`,
+			`product_id`,
+			`subtitle`,
+			`bargain_money`,
+			`retail_min_price`,
+			`open_time`,
+			`end_time`,
+			`abbr_pic_url`,
+			`is_delete`)
+		values(
+			#{title},
+			#{itemPicUrl},
+			#{goodsId},
+			#{productId},
+			#{subtitle},
+			#{bargainMoney},
+			#{retailMinPrice},
+			#{openTime},
+			#{endTime},
+			#{abbrPicUrl},
+			#{isDelete})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.GoodsBargainEntity">
+        update mall_goods_bargain
+        <set>
+            <if test="title != null">`title` = #{title},</if>
+            <if test="itemPicUrl != null">`item_pic_url` = #{itemPicUrl},</if>
+            <if test="goodsId != null">`goods_id` = #{goodsId},</if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="subtitle != null">`subtitle` = #{subtitle},</if>
+            <if test="bargainMoney != null">`bargain_money` = #{bargainMoney},</if>
+            <if test="retailMinPrice != null">`retail_min_price` = #{retailMinPrice},</if>
+            <if test="openTime != null">`open_time` = #{openTime},</if>
+            <if test="endTime != null">`end_time` = #{endTime},</if>
+            <if test="isDelete != null">`is_delete` = #{isDelete},</if>
+            <if test="abbrPicUrl != null">`abbr_pic_url` = #{abbrPicUrl}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_goods_bargain where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_goods_bargain where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

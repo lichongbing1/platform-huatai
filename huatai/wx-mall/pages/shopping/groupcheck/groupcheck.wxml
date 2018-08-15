@@ -1,0 +1,81 @@
+<view class="container">
+  <view class="address-box">
+    <view class="address-item" bindtap="selectAddress">
+      <view class="l">
+        <text class="name">{{addressVo.userName}}</text>
+      </view>
+      <view class="m">
+        <text class="mobile">{{addressVo.telNumber}}</text>
+        <text class="address">{{addressVo.provinceName +addressVo.cityName +addressVo.countyName + addressVo.detailInfo?addressVo.provinceName +addressVo.cityName +addressVo.countyName + addressVo.detailInfo:'选择地址'}}</text>
+      </view>
+      <view class="r">
+        <image src="/static/images/address_right.png"></image>
+      </view>
+    </view>
+    <view class="address-item address-empty" bindtap="addAddress" wx:if="{{addressVo.id <= 0}}">
+      <view class="m">
+        还没有收货地址，去添加
+      </view>
+      <view class="r">
+        <image src="/static/images/address_right.png"></image>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-group" style="margin-top: 5px;">
+    <view class="list-cell">
+      <view class="list-cell-hd">
+        <image style="width: 20px;height:20px;" src="/static/images/cart-time.png"></image>
+      </view>
+      <view class="list-cell-bd">
+        <view style="padding-left:10px;" class="list-label">送达时间</view>
+      </view>
+      <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}" class="list-cell-ft router">
+        <text class="red-txt">{{delivery_remark}}</text>
+      </picker>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">商品合计</view>
+      </view>
+      <view class="list-cell-ft">
+        <text class="txt">￥{{goodsTotalPrice}}</text>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">配送费</view>
+      </view>
+      <view class="list-cell-ft">
+        <text class="txt">￥{{freightPrice}}</text>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-hd">
+        <view class="list-label">留言</view>
+        <textarea style="margin-left: 15px;" maxlength="60" bindblur="bindPostscriptBlur" auto-height placeholder="请输入留言信息" />
+      </view>
+    </view>
+  </view>
+
+  <view class="goods-items">
+    <view class="item">
+      <view class="img">
+        <image src="{{goodsVo.list_pic_url}}"></image>
+      </view>
+      <view class="info">
+        <view class="t">
+          <text class="name">{{goodsVo.goods_name}}</text>
+          <text class="number">x{{number}}</text>
+        </view>
+        <view class="m">{{null==productVo.goods_specification_name_value?"":productVo.goods_specification_name_value}}</view>
+        <view class="b">￥{{goodsPrice}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="order-total">
+    <view class="l">实付：￥{{actualPrice}}</view>
+    <view class="r" bindtap="submitOrder">去付款</view>
+  </view>
+</view>

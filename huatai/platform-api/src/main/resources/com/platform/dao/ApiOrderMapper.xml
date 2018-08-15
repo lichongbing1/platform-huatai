@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiOrderMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.platform.entity.OrderVo" id="orderMap">
+        <result property="id" column="id"/>
+        <result property="order_sn" column="order_sn"/>
+        <result property="user_id" column="user_id"/>
+        <result property="order_status" column="order_status"/>
+        <result property="shipping_status" column="shipping_status"/>
+        <result property="pay_status" column="pay_status"/>
+        <result property="consignee" column="consignee"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="district" column="district"/>
+        <result property="address" column="address"/>
+        <result property="address_id" column="address_id"/>
+        <result property="mobile" column="mobile"/>
+        <result property="postscript" column="postscript"/>
+        <result property="shipping_id" column="shipping_id"/>
+        <result property="shipping_name" column="shipping_name"/>
+        <result property="shipping_mobile" column="shipping_mobile"/>
+        <result property="shipping_fee" column="shipping_fee"/>
+        <result property="shipping_no" column="shipping_no"/>
+        <result property="pay_id" column="pay_id"/>
+        <result property="pay_name" column="pay_name"/>
+        <result property="actual_price" column="actual_price"/>
+        <result property="integral" column="integral"/>
+        <result property="integral_money" column="integral_money"/>
+        <result property="order_price" column="order_price"/>
+        <result property="goods_price" column="goods_price"/>
+        <result property="add_time" column="add_time"/>
+        <result property="confirm_time" column="confirm_time"/>
+        <result property="pay_time" column="pay_time"/>
+        <result property="freight_price" column="freight_price"/>
+        <result property="coupon_id" column="coupon_id"/>
+        <result property="coupon_name" column="coupon_name"/>
+        <result property="parent_id" column="parent_id"/>
+        <result property="coupon_price" column="coupon_price"/>
+        <result property="full_cut_price" column="full_cut_price"/>
+        <result property="order_type" column="order_type"/>
+        <result property="activity_id" column="activity_id"/>
+        <result property="store_id" column="store_id"/>
+        <result property="delivery_date" column="delivery_date"/>
+        <result property="delivery_remark" column="delivery_remark"/>
+        <result property="predict_time" column="predict_time"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="comment_count" column="comment_count"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="orderMap">
+		select a.*,b.latitude,b.longitude
+		from mall_order a
+		left join mall_address b on a.address_id = b.id
+		where a.id = #{value}
+	</select>
+
+    <select id="queryObjectByOrderSn" resultMap="orderMap">
+        select a.*,b.latitude,b.longitude
+        from mall_order a
+        left join mall_address b on a.address_id = b.id
+        where a.order_sn = #{order_sn}
+    </select>
+
+    <select id="queryList" resultMap="orderMap">
+        select a.*,b.latitude,b.longitude
+        from mall_order a
+        left join mall_address b on a.address_id = b.id
+        <where>
+            <if test="user_id != null">
+                and a.user_id = #{user_id}
+            </if>
+            <if test="pay_status != null">
+                and a.pay_status = #{pay_status}
+            </if>
+            <if test="shipping_status != null">
+                and a.shipping_status = #{shipping_status}
+            </if>
+            <if test="order_status != null">
+                and a.order_status = #{order_status}
+            </if>
+            <if test="evaluate_status != null and evaluate_status != 0 ">
+                and a.comment_count <![CDATA[ >= ]]>  1
+            </if>
+            <if test="evaluate_status != null and evaluate_status == 0 ">
+                and a.comment_count <![CDATA[ < ]]>  1
+            </if>
+            <if test="startDate!=null  and startDate!=''">
+                AND a.add_time >= #{startDate}
+            </if>
+            <if test="endDate!=null  and endDate!=''">
+                AND a.add_time  <![CDATA[ < ]]>   #{endDate}
+            </if>
+            <if test="shippingId!=null  and shippingId!=''">
+                AND a.shipping_id = #{shippingId}
+            </if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by a.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(id) from mall_order a
+        <where>
+            <if test="user_id != null">
+                and a.user_id = #{user_id}
+            </if>
+            <if test="pay_status != null">
+                and a.pay_status = #{pay_status}
+            </if>
+            <if test="shipping_status != null">
+                and a.shipping_status = #{shipping_status}
+            </if>
+            <if test="evaluate_status != null and evaluate_status != 0 ">
+                and a.comment_count <![CDATA[ >= ]]>  1
+            </if>
+            <if test="evaluate_status != null and evaluate_status == 0 ">
+                and a.comment_count <![CDATA[ < ]]>  1
+            </if>
+            <if test="startDate!=null  and startDate!=''">
+                AND a.add_time >= #{startDate}
+            </if>
+            <if test="endDate!=null  and endDate!=''">
+                AND a.add_time  <![CDATA[ < ]]>   #{endDate}
+            </if>
+            <if test="shippingId!=null  and shippingId!=''">
+                AND a.shipping_id = #{shippingId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.OrderVo" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_order
+		(
+			`order_sn`,
+			`user_id`,
+			`order_status`,
+			`shipping_status`,
+			`pay_status`,
+			`consignee`,
+			`country`,
+			`province`,
+			`city`,
+			`district`,
+			`address`,
+			`address_id`,
+			`mobile`,
+			`postscript`,
+			`pay_id`,
+			`pay_name`,
+			`shipping_fee`,
+			`actual_price`,
+			`integral`,
+			`integral_money`,
+			`order_price`,
+			`goods_price`,
+			`add_time`,
+			`confirm_time`,
+			`pay_time`,
+			`freight_price`,
+			`coupon_id`,
+			`parent_id`,
+			`coupon_price`,
+			`full_cut_price`,
+			`order_type`,
+			`activity_id`,
+			`store_id`,
+			`delivery_date`,
+			`delivery_remark`,
+			`predict_time`,
+			`coupon_name`,
+			`comment_count`
+		)
+		values
+		(
+			#{order_sn},
+			#{user_id},
+			#{order_status},
+			#{shipping_status},
+			#{pay_status},
+			#{consignee},
+			#{country},
+			#{province},
+			#{city},
+			#{district},
+			#{address},
+			#{address_id},
+			#{mobile},
+			#{postscript},
+			#{pay_id},
+			#{pay_name},
+			#{shipping_fee},
+			#{actual_price},
+			#{integral},
+			#{integral_money},
+			#{order_price},
+			#{goods_price},
+			now(),
+			#{confirm_time},
+			#{pay_time},
+			#{freight_price},
+			#{coupon_id},
+			#{parent_id},
+			#{coupon_price},
+			#{full_cut_price},
+			#{order_type},
+			#{activity_id},
+			#{store_id},
+			#{delivery_date},
+			#{delivery_remark},
+			#{predict_time},
+			#{coupon_name},
+			#{comment_count}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.OrderVo">
+        update mall_order
+        <set>
+            <if test="order_sn != null">`order_sn` = #{order_sn},</if>
+            <if test="user_id != null">`user_id` = #{user_id},</if>
+            <if test="order_status != null">`order_status` = #{order_status},</if>
+            <if test="shipping_status != null">`shipping_status` = #{shipping_status},</if>
+            <if test="pay_status != null">`pay_status` = #{pay_status},</if>
+            <if test="consignee != null">`consignee` = #{consignee},</if>
+            <if test="country != null">`country` = #{country},</if>
+            <if test="province != null">`province` = #{province},</if>
+            <if test="city != null">`city` = #{city},</if>
+            <if test="district != null">`district` = #{district},</if>
+            <if test="address != null">`address` = #{address},</if>
+            <if test="address_id != null">`address_id` = #{address_id},</if>
+            <if test="mobile != null">`mobile` = #{mobile},</if>
+            <if test="postscript != null">`postscript` = #{postscript},</if>
+            <if test="shipping_id != null">`shipping_id` = #{shipping_id},</if>
+            <if test="shipping_name != null">`shipping_name` = #{shipping_name},</if>
+            <if test="shipping_fee != null">`shipping_fee` = #{shipping_fee},</if>
+            <if test="shipping_no != null">`shipping_no` = #{shipping_no},</if>
+            <if test="pay_id != null">`pay_id` = #{pay_id},</if>
+            <if test="pay_name != null">`pay_name` = #{pay_name},</if>
+            <if test="pay_time != null">`pay_time` = #{pay_time},</if>
+            <if test="actual_price != null">`actual_price` = #{actual_price},</if>
+            <if test="integral != null">`integral` = #{integral},</if>
+            <if test="integral_money != null">`integral_money` = #{integral_money},</if>
+            <if test="order_price != null">`order_price` = #{order_price},</if>
+            <if test="goods_price != null">`goods_price` = #{goods_price},</if>
+            <if test="confirm_time != null">`confirm_time` = #{confirm_time},</if>
+            <if test="freight_price != null">`freight_price` = #{freight_price},</if>
+            <if test="coupon_id != null">`coupon_id` = #{coupon_id},</if>
+            <if test="parent_id != null">`parent_id` = #{parent_id},</if>
+            <if test="coupon_price != null">`coupon_price` = #{coupon_price},</if>
+            <if test="full_cut_price != null">`full_cut_price` = #{full_cut_price},</if>
+            <if test="order_type != null">`order_type` = #{order_type},</if>
+            <if test="activity_id != null">`activity_id` = #{activity_id},</if>
+            <if test="store_id != null">`store_id` = #{store_id},</if>
+            <if test="shipping_mobile != null">`shipping_mobile` = #{shipping_mobile},</if>
+            <if test="delivery_date != null">`delivery_date` = #{delivery_date},</if>
+            <if test="delivery_remark != null">`delivery_remark` = #{delivery_remark},</if>
+            <if test="predict_time != null">`predict_time` = #{predict_time},</if>
+            <if test="coupon_name != null">`coupon_name` = #{coupon_name},</if>
+            <if test="comment_count != null">`comment_count` = #{comment_count},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="riderOrderUpdate" parameterType="com.platform.entity.OrderVo">
+        update mall_order
+        <set>
+            `order_status` = #{order_status},
+            `shipping_status` = #{shipping_status},
+            `shipping_id` = #{shipping_id},
+            `shipping_name` = #{shipping_name},
+            `shipping_fee` = #{shipping_fee},
+            `shipping_no` = #{shipping_no},
+            `shipping_mobile` = #{shipping_mobile}
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="queryUcenterMap" resultType="map">
+        select
+        count(a.id) as orders,
+        sum(case a.order_status when 0 then 1 else 0 end ) as unPayNum,
+        sum(case a.order_status when 300 then 1 else 0 end ) as unTakeNum,
+        sum(case when b.id is null and a.order_status=301 then 1 else 0 end ) as unEvalNum
+        from
+        mall_order a
+        left join mall_comment b on a.id = b.order_id
+        where 1 = 1
+        <if test="user_id != null">
+            and a.user_id = #{user_id}
+        </if>
+        <if test="pay_status != null">
+            and a.pay_status = #{pay_status}
+        </if>
+        <if test="shipping_status != null">
+            and a.shipping_status = #{shipping_status}
+        </if>
+        <if test="evaluate_status != null and evaluate_status == 0 ">
+            and not exists (select 1 from mall_comment m where a.id = m.order_id )
+        </if>
+        <if test="startDate!=null  and startDate!=''">
+            AND a.add_time >= #{startDate}
+        </if>
+        <if test="endDate!=null  and endDate!=''">
+            AND a.add_time  <![CDATA[ < ]]>   #{endDate}
+        </if>
+        <if test="shippingId!=null  and shippingId!=''">
+            AND a.shipping_id  <![CDATA[ < ]]>   #{shippingId}
+        </if>
+    </select>
+
+</mapper>

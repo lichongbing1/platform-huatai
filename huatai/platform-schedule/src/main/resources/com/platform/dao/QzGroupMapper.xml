@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.QzGroupMapper">
+    <select id="queryRemindGroupList" resultType="map">
+        SELECT
+        a.id,
+        a.open_time,
+        a.group_id,
+        a.user_id,
+        u.weixin_openid AS open_id,
+        a.end_time,
+        a.attend_num,
+        g.`name`,
+        detail.`form_id`,
+        b.retail_min_price
+        FROM
+        mall_goods_group_open a
+        LEFT JOIN mall_goods_group b ON a.group_id = b.id
+        LEFT JOIN mall_goods g ON g.id = b.goods_id
+        LEFT JOIN mall_user u ON a.user_id = u.id
+        LEFT JOIN mall_goods_group_open_detail detail ON detail.open_id = a.id
+        WHERE detail.`form_id` is not null and a.attend_status = 2
+        AND a.end_time > date_add(now(), INTERVAL 1 DAY)
+        AND a.end_time <![CDATA[ <  ]]>  date_add(now(), INTERVAL 2 DAY)
+    </select>
+
+
+    <select id="queryPastGroupList" resultType="map">
+        SELECT
+        a.id,
+        a.group_id,
+        a.user_id,
+        u.weixin_openid AS open_id,
+        a.attend_num,
+        g.`name`,
+        detail.`form_id`,
+        b.retail_min_price,
+        b.min_open_group
+        FROM
+        mall_goods_group_open a
+        LEFT JOIN mall_goods_group b ON a.group_id = b.id
+        LEFT JOIN mall_goods g ON g.id = b.goods_id
+        LEFT JOIN mall_user u ON a.user_id = u.id
+        LEFT JOIN mall_goods_group_open_detail detail ON detail.open_id = a.id
+        WHERE detail.`form_id` is not null and a.attend_status = 2 and a.attend_num <![CDATA[ <  ]]> b.min_open_group
+        AND a.end_time > now()
+    </select>
+
+    <update id="updatePastGroup" parameterType="map">
+        update mall_goods_group_open
+        <set>
+            `attend_status` = 3
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

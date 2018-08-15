@@ -1,0 +1,147 @@
+<view class="container">
+  <view class="cart-panel" wx:if="{{footCart.goodsCount>0}}">
+    <view class="cart-icon">
+      <navigator class="nav-cell" open-type='switchTab' url="/pages/cart/cart">
+        <image src="../../static/images/cart-fixed.png">
+        </image>
+      </navigator>
+      <view class="cart-num">{{footCart.goodsCount}}</view>
+    </view>
+    <view class="cart-body">￥{{footCart.checkedGoodsAmount}}</view>
+    <navigator class="nav-cell" open-type='switchTab' url="/pages/cart/cart">
+      <view class="cart-pay">去结算 > </view>
+    </navigator>
+  </view>
+  <view wx:if="{{showNavList}}" class="modal-wrap"></view>
+  <view class="fast-nav">
+    <contact-button wx:if="{{!showNavList}}" class="contact" size="25" type="primary" session-from="weapp">
+      <text>找客服</text>
+    </contact-button>
+    <view wx:if="{{!showNavList}}" class="nav" bindtap="toggleNav">
+      <text>快捷</text>
+      <text>导航</text>
+    </view>
+    <view class="nav-list" wx:if="{{showNavList}}">
+      <view class="nav-item">
+        <text class="nav-text">首页</text>
+        <view class="nav-cell" bindtap="switchNav" data-name="index">
+          <image src="../../static/images/nav-1.png"></image>
+        </view>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">足迹</text>
+        <navigator class="nav-cell" url="../ucenter/footprint/footprint">
+          <image src="../../static/images/nav-2.png"></image>
+        </navigator>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">搜索</text>
+        <navigator class="nav-cell" url="../search/search">
+          <image src="../../static/images/nav-3.png"></image>
+        </navigator>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">购物车</text>
+        <view class="nav-cell" bindtap="switchNav" data-name="cart">
+          <image src="../../static/images/nav-4.png"></image>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{showNavList}}" class="close" bindtap="toggleNav">X</view>
+  </view>
+  <view class="search">
+    <navigator url="/pages/search/search" class="input">
+      <image class="icon"></image>
+      <text class="txt">商品搜索, 共{{goodsCount}}款好物</text>
+    </navigator>
+  </view>
+  <view class="activity">
+    <view class="activity-box">
+      <view class="item {{filterDiscount == 0 ? 'active' : ''}}" bindtap="openSortFilter" id="defaultActivity">
+        <text class="txt">不限</text>
+      </view>
+      <view class="item by-sell {{filterDiscount == 1 ? 'active' : ''}}" bindtap="openSortFilter" id="discountActivity">
+        <text class="txt">今日特价</text>
+      </view>
+      <view class="item by-price {{filterDiscount == 2 ? 'active' : ''}}" bindtap="openSortFilter" id="groupActivity">
+        <text class="txt">活动</text>
+      </view>
+    </view>
+  </view>
+  <view class="catalog">
+    <scroll-view class="nav" scroll-y="true">
+      <view class="item {{ currentCategory.id == item.id ? 'active' : ''}}" wx:for="{{navList}}" data-id="{{item.id}}" data-index="{{index}}" bindtap="switchCate" wx:key="{{index}}">{{item.name}}</view>
+      <!-- <view class="contact">
+        <button open-type="contact" size="20" session-from="weapp">
+          </button>
+      </view> -->
+    </scroll-view>
+    <scroll-view class="cate" scroll-y="true">
+      <navigator url="url" class="banner">
+        <image class="image" wx:if="{{currentCategory.wap_banner_url}}" src="{{currentCategory.wap_banner_url}}"></image>
+        <view class="txt">{{currentCategory.front_name}}</view>
+      </navigator>
+      <view class="hd">
+        <text class="line"></text>
+        <text class="txt">{{currentCategory.name}}分类</text>
+        <text class="line"></text>
+      </view>
+      <view class="bd">
+        <navigator url="/pages/category/category?id={{item.id}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{currentCategory.subCategoryList}}" wx:key="{{item.id}}">
+          <image class="icon" wx:if="{{item.wap_banner_url}}" src="{{item.wap_banner_url}}"></image>
+          <text class="txt">{{item.name}}</text>
+        </navigator>
+      </view>
+      <view class="sort">
+        <view class="sort-box">
+          <view class="item {{currentSortType == 'default' ? 'active' : ''}}" bindtap="openSortFilter" id="defaultSort">
+            <text class="txt">综合</text>
+          </view>
+          <view class="item by-sell {{currentSortType == 'sell' ? 'active' : ''}} {{currentSortOrder == 'asc'  ? 'asc' : 'desc'}}" bindtap="openSortFilter" id="sellSort">
+            <text class="txt">销量</text>
+          </view>
+          <view class="item by-price {{currentSortType == 'price' ? 'active' : ''}} {{currentSortOrder == 'asc'  ? 'asc' : 'desc'}}" bindtap="openSortFilter" id="priceSort">
+            <text class="txt">价格</text>
+          </view>
+        </view>
+      </view>
+      <view class="cate-item">
+        <view class="item" wx:for="{{goodsList}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+          <navigator url="{{filterDiscount != 2 ?'/pages/goods/goods?id='+item.id:'/pages/groupDetail/groupDetail?id='+item.group_id }}">
+            <view class="left">
+              <image class="img" wx:if="{{item.list_pic_url}}" src="{{item.list_pic_url}}"></image>
+            </view>
+
+          <view class="right">
+            <view class="text">
+
+                <text class="name">{{item.name}}</text>
+                <text class="desc">{{item.goods_brief}}</text>
+
+              <view class="goods-do">
+                <text class="price">￥{{item.retail_price}}</text>
+                <text class="org-price line-through">￥{{item.market_price}}</text>
+                <!-- //数量加减 -->
+                <view class="number-item">
+                  <view class="selnum">
+                    <view class="cut" data-goods-id="{{item.id}}" data-product-id="{{item.product_id}}" bindtap="cutNumber"></view>
+                    <input value="{{item.cart_num}}" class="number" disabled="true" type="number" />
+                    <view class="add" data-goods-id="{{item.id}}" data-product-id="{{item.product_id}}" bindtap="addNumber"></view>
+                  </view>
+                </view>
+              </view>
+            </view>
+
+          </view>
+    </navigator>
+
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="coupon" wx:if="{{openCoupon}}">
+     <view class="attr-close" bindtap="closeCoupon">X</view>
+      <image class="img" src="/static/imgys/coupon-gun.png" bindtap="takeShareCoupon"/>
+    </view>
+</view>

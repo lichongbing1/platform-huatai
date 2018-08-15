@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="platform-admin" />
+        <module name="platform-api" />
+        <module name="platform-common" />
+        <module name="platform-gen" />
+        <module name="platform-schedule" />
+        <module name="platform-shiro" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="platform-admin" target="1.7" />
+      <module name="platform-api" target="1.7" />
+      <module name="platform-common" target="1.7" />
+      <module name="platform-gen" target="1.7" />
+      <module name="platform-meiping" target="1.7" />
+      <module name="platform-schedule" target="1.7" />
+      <module name="platform-shiro" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

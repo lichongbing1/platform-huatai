@@ -1,0 +1,98 @@
+<view class="container">
+  <view class="order-info">
+    <view class="item-a">下单时间：{{orderInfo.add_time}}</view>
+    <view class="item-b">订单编号：{{orderInfo.order_sn}}</view>
+    <view class="item-c">
+      <view class="l">实付：
+        <text class="cost">￥{{orderInfo.actual_price}}</text>
+      </view>
+      <view class="r">
+        <view class="btn" wx:if="{{ handleOption.cancel==true && orderInfo.order_type == '1'}}" bindtap="cancelOrder">取消订单</view>
+        <view class="btn" wx:if="{{ handleOption.pay==true && orderInfo.dateformat }}" bindtap="payOrder">去付款 {{orderInfo.dateformat.min}}{{orderInfo.dateformat?':':''}}{{orderInfo.dateformat.sec}}</view>
+        <view class="btn" wx:if="{{ handleOption.confirm==true }}" bindtap="confirmOrder">确认收货</view>
+        <view class="btn" wx:if="{{ handleOption.comment==true }}" bindtap="postComment">发表评价</view>
+        <view class="btn" wx:if="{{ orderInfo.comment_count > 0 }}" bindtap="lookComment">查看评价</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-group goods-info">
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label strong">商品信息</view>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="goods-list">
+        <view wx:for="{{orderGoods}}" wx:key="{{index}}" class="goods-list-cell">
+          <navigator open-type='navigate' url="/pages/goods/goods?id={{item.goods_id}}">
+            <text class="name">{{item.goods_name}}</text>
+            <text class="num fr">x{{item.number}}</text>
+            <text class="price fr">￥{{item.retail_price}}</text>
+          </navigator>
+        </view>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label week">配送费</view>
+      </view>
+      <view class="list-cell-ft week">
+        ￥{{orderInfo.freight_price}}
+      </view>
+    </view>
+    <view class="list-cell" wx:if="{{orderInfo.full_cut_price}}">
+      <view class="list-cell-bd">
+        <view class="list-label week orange">满减</view>
+      </view>
+      <view class="list-cell-ft week orange">
+        -￥{{orderInfo.full_cut_price}}
+      </view>
+    </view>
+    <view class="list-cell" wx:if="{{orderInfo.coupon_price}}">
+      <view class="list-cell-bd">
+        <view class="list-label week orange">优惠券：{{orderInfo.coupon_name}}</view>
+      </view>
+      <view class="list-cell-ft week orange">
+        -￥{{orderInfo.coupon_price}}
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+
+      </view>
+      <view class="list-cell-ft week">
+        合计
+        <text class="orange">￥{{orderInfo.actual_price}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-group goods-info">
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label strong">配送信息</view>
+      </view>
+    </view>
+    <view class="list-cell"  wx:if="{{orderInfo.delivery_remark}}">
+      <view class="list-cell-bd">
+        <view class="list-label week">期望时间：{{orderInfo.delivery_remark}}</view>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label week">收货人：{{orderInfo.consignee}}</view>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label week">收货地址：{{orderInfo.address}}</view>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label week">留言：{{orderInfo.postscript}}</view>
+      </view>
+    </view>
+  </view>
+</view>

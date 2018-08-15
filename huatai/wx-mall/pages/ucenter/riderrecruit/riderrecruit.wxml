@@ -1,0 +1,37 @@
+<view class="container">
+  <image class="banner" src="{{recruitVo.picUrl}}" background-size="cover"></image>
+   <view class="list-group" style="margin-top: 0;">
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">公司名称</view>
+      </view>
+      <view class="list-cell-ft">
+        {{recruitVo.linkMan}}
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">联系电话</view>
+      </view>
+      <view class="list-cell-ft tel" bindtap="callPhone" data-tel="{{recruitVo.linkPhone}}">
+        {{recruitVo.linkPhone}}
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">联系手机</view>
+      </view>
+      <view class="list-cell-ft tel" bindtap="callPhone" data-tel="{{recruitVo.linkMobile}}">
+        {{recruitVo.linkMobile}}
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view style="width: 150rpx;" class="list-label">招聘简介</view>
+      </view>
+      <view class="list-cell-ft">
+        {{recruitVo.description}}
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,99 @@
+<view class="container">
+  <view class="list-group" style="margin-top: 0px;">
+    <view class="list-cell">
+      <view class="list-cell-hd">
+        <image style="width: 80rpx;height:80rpx;" src="/static/images/rider.png"></image>
+      </view>
+      <view class="list-cell-bd">
+        <view class="list-label" style="padding-left: 20rpx;">
+          {{orderInfo.shipping_name}}
+        </view>
+      </view>
+      <view class="list-cell-ft" style="font-size: .7em;">
+        小伙伴都挺不容易的，能不能给个好评，亲 ^_^
+      </view>
+    </view>
+  </view>
+
+  <view class="service-box">
+    <view class="service-item">
+      <text class="label">服务态度</text>
+      <view class="star-box">
+        <text class="star {{ mannerScore > index ? 'checked' : '' }}" bindtap="handleScore" wx:for="{{5}}" wx:key="{{index}}" data-score="{{index + 1}}" data-aim="mannerScore">★</text>
+      </view>
+      <text class="desc">{{handleDesc[mannerScore -1]}}</text>
+    </view>
+    <view class="service-item">
+      <text class="label">配送速度</text>
+      <view class="star-box">
+        <text class="star {{ speedScore > index ? 'checked' : '' }}" bindtap="handleScore" wx:for="{{5}}" wx:key="{{index}}" data-score="{{index + 1}}" data-aim="speedScore">★</text>
+      </view>
+      <text class="desc">{{handleDesc[speedScore -1]}}</text>
+    </view>
+  </view>
+
+  <view class="goods-list" wx:for="{{goodsList}}" wx:key="{{num}}" wx:for-index="num">
+    <view class="list-group">
+      <view class="list-cell">
+        <view class="list-cell-hd">
+          <image style="width: 100rpx;height:100rpx;" src="{{item.list_pic_url}}"></image>
+        </view>
+        <view class="list-cell-bd" style="padding-left: 20rpx;">
+          <view class="list-label">
+            {{item.goods_name}}
+          </view>
+          <view class="list-label-desc">
+            规格：{{item.goods_specification_name_value}}
+          </view>
+        </view>
+      </view>
+      <view class="service-item" style="padding-left:20px">
+        <text class="label">商品质量</text>
+        <view class="star-box">
+          <text class="star {{ goodsList[num].score > index ? 'checked' : '' }}" bindtap="handleScore" wx:for="{{5}}" wx:key="{{index}}" data-score="{{index + 1}}" data-aim="{{ 'goodsList['+num+'].score' }}">★</text>
+        </view>
+        <text class="desc">{{handleDesc[goodsList[num].score -1]}}</text>
+      </view>
+
+      <view class="input-box">
+        <textarea class="content" bindinput="bindInpuntValue" auto-height data-goods-index="{{num}}" maxlength="140" placeholder="留言经过筛选后，对所有人可见" />
+        <text class="count">{{goodsList[num].comment.length}}/140</text>
+      </view>
+      <view class="pic-box">
+        <view class="pic-item" wx:for="{{goodsList[num].pics}}" wx:key="index">
+          <image src="{{item}}" bindtap="previewPic" data-urls="{{goodsList[num].pics}}"></image>
+          <text class="pic-delete" bindtap="handleDelete" data-src="{{item}}" data-pics="{{goodsList[num].pics}}" data-goods-index="{{num}}">x</text>
+        </view>
+        <view class="pic-item pic-handle" wx:if="{{goodsList[num].pics.length < 3}}" bindtap="chooseImageTap" data-pics="{{goodsList[num].pics}}" data-goods-index="{{num}}">
+          <image src="/static/images/photo_icon.png"></image>
+          <text class="desc">添加图片</text>
+        </view>
+      </view>
+
+    </view>
+  </view>
+  <view class="btn-box">
+    <button type="primary" bindtap="onPost">发 布</button>
+  </view>
+</view>
+
+<view class="drawer_box" wx:if="{{coupon.name}}">
+   <view class="drawer_title">恭喜你获取一张优惠券</view>
+   <view style="margin: 5px 10px;">
+      <view class="coupon-box coupon-box1 coupon-box-g">
+        <view class="coupon-bg coupon-bg1">
+          <view>
+            <text class="coupon-currency">￥</text>{{ coupon.type_money }}</view>
+          <view class="coupon-type" wx:if="{{coupon.send_type==4}}">新人专享</view>
+        </view>
+        <view class="coupon-info">
+          <view class="coupon-title">{{ coupon.name }}</view>
+          <view class="coupon-desc">
+            <view>{{ coupon.use_start_date }}-{{ coupon.use_end_date }}</view>
+            <view>{{ null!=item.coupon_txt?item.coupon_txt:"" }}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  <view class="btn_ok" bindtap="couponClickBack">确定</view>
+</view>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiProductMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.platform.entity.ProductVo" id="productMap">
+        <result property="id" column="id"/>
+        <result property="goods_id" column="goods_id"/>
+        <result property="goods_specification_ids" column="goods_specification_ids"/>
+        <result property="goods_specification_name_value" column="goods_specification_name_value"/>
+        <result property="goods_sn" column="goods_sn"/>
+        <result property="retail_price" column="retail_price"/>
+        <result property="market_price" column="market_price"/>
+        <result property="store_id" column="store_id"/>
+        <result property="stock_num" column="stock_num"/>
+        <result property="sell_volume" column="sell_volume"/>
+        <result property="goods_default" column="goods_default"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="productMap">
+        SELECT
+            a.*
+        FROM
+            mall_product a
+        where id = #{value}
+	</select>
+
+    <select id="queryObjectByStoreId" resultMap="productMap">
+       SELECT
+            a.id,
+            a.goods_id,
+            a.goods_specification_ids,
+            a.goods_specification_name_value,
+            a.goods_sn,
+            a.goods_default,
+            b.sell_volume,
+            b.market_price,
+            b.retail_price,
+            b.store_id,
+            b.stock_num
+        FROM
+            mall_product a
+        LEFT JOIN mall_product_store_rela b ON a.id = b.product_id
+        where b.stock_num is not null and b.stock_num > 0 and a.id = #{id} and b.store_id = #{store_id}
+    </select>
+
+    <select id="queryOneByGoodsId" resultMap="productMap">
+        SELECT
+            a.id,
+            a.goods_id,
+            a.goods_specification_ids,
+            a.goods_specification_name_value,
+            a.goods_sn,
+            a.goods_default,
+            b.sell_volume,
+            b.market_price,
+            b.retail_price,
+            b.store_id,
+            b.stock_num
+        FROM
+        mall_product a
+        LEFT JOIN mall_product_store_rela b ON a.id = b.product_id
+        where b.stock_num is not null and a.goods_id = #{goods_id} and b.store_id = #{store_id}
+        order by b.stock_num desc,a.id desc
+        limit 1
+    </select>
+
+    <select id="queryList" resultMap="productMap">
+        SELECT
+        a.*,
+        b.sell_volume,
+        b.market_price,
+        b.retail_price,
+        b.stock_num
+        FROM
+        mall_product a
+        LEFT JOIN mall_product_store_rela b ON a.id = b.product_id
+        <where>
+            b.stock_num > 0
+            <if test="goods_id != null">
+                and a.goods_id = #{goods_id}
+            </if>
+            <if test="store_id != null">
+                and b.store_id = #{store_id}
+            </if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(id) from mall_product
+        FROM
+        mall_product a
+        LEFT JOIN mall_product_store_rela b ON a.id = b.product_id
+        <where>
+            b.stock_num > 0
+            <if test="goods_id != null">
+                and a.goods_id = #{goods_id}
+            </if>
+            <if test="store_id != null">
+                and b.store_id = #{store_id}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateStockNum" parameterType="com.platform.entity.ProductVo">
+        update mall_product_store_rela a
+        <set>
+            <if test="stock_num != null">a.`stock_num` = #{stock_num},</if>
+            <if test="sell_volume != null">a.`sell_volume` = #{sell_volume},</if>
+        </set>
+        where a.product_id = #{id} and a.store_id = #{store_id}
+    </update>
+
+    <update id="updateSellVolumeNum" parameterType="com.platform.entity.ProductVo">
+        update mall_product_store_rela a
+        <set>
+            <if test="sell_volume != null">a.`sell_volume` = #{sell_volume},</if>
+        </set>
+        where a.product_id = #{id} and a.store_id = #{store_id}
+    </update>
+</mapper>

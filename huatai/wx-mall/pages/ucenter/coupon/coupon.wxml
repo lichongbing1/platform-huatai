@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="coupon-form">
+    <view class="input-box">
+      <input class="coupon-sn" placeholder="请输入优惠码" bindinput="bindCouponNumberInput" />
+      <image class="clear-icon" src="/static/images.clear.png"></image>
+    </view>
+    <button class="add-btn" bindtap="exchangeCoupon">兑换</button>
+  </view>
+  <view class="help">使用说明</view>
+  <view style="margin: 5px 10px;" wx:for="{{couponList}}" wx:key="{{item.id}}" bindtap="" data-coupon-id="{{item.id}}">
+    <view class="coupon-box coupon-box1 coupon-box-g">
+      <view class="coupon-bg coupon-bg1">
+        <view>
+          <text class="coupon-currency">￥</text>{{ item.type_money }}</view>
+        <view class="coupon-type" wx:if="{{item.send_type==4}}">新人专享</view>
+        <view class="coupon-type" wx:if="{{item.send_type == 0}}">满减</view>
+      </view>
+      <view class="coupon-info">
+        <view class="coupon-title">{{ item.coupon_name }}</view>
+        <view class="coupon-desc">
+          <view>{{ item.add_time }}-{{ item.end_time }}</view>
+          <view>{{ null!=item.coupon_txt?item.coupon_txt:"" }}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

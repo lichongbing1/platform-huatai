@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/platform-admin/platform-admin.iml" filepath="$PROJECT_DIR$/platform-admin/platform-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-api/platform-api.iml" filepath="$PROJECT_DIR$/platform-api/platform-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-common/platform-common.iml" filepath="$PROJECT_DIR$/platform-common/platform-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-gen/platform-gen.iml" filepath="$PROJECT_DIR$/platform-gen/platform-gen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-meiping.iml" filepath="$PROJECT_DIR$/platform-meiping.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-schedule/platform-schedule.iml" filepath="$PROJECT_DIR$/platform-schedule/platform-schedule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-shiro/platform-shiro.iml" filepath="$PROJECT_DIR$/platform-shiro/platform-shiro.iml" />
+    </modules>
+  </component>
+</project>

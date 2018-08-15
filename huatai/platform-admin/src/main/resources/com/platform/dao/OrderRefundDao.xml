@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.OrderRefundDao">
+
+    <resultMap type="com.platform.entity.OrderRefundEntity" id="orderRefundMap">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="refundType" column="refund_type"/>
+        <result property="refundTime" column="refund_time"/>
+        <result property="creator" column="creator"/>
+        <result property="refundMoney" column="refund_money"/>
+        <result property="refundReason" column="refund_reason"/>
+        <result property="refundStatus" column="refund_status"/>
+        <result property="approver" column="approver"/>
+        <result property="approvalTime" column="approval_time"/>
+        <result property="approvalRemark" column="approval_remark"/>
+
+        <result property="orderStatus" column="order_status"/>
+        <result property="actualPrice" column="actual_price"/>
+        <result property="addTime" column="add_time"/>
+        <result property="orderType" column="order_type"/>
+        <result property="policyType" column="policy_type"/>
+        <result property="userName" column="username"/>
+        <result property="cardId" column="cardId"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.OrderRefundEntity">
+		select
+			r.*,
+            o.order_sn,
+            o.order_status,
+            o.actual_price,
+            o.order_price,
+            o.goods_price,
+            o.add_time,
+            o.policy_type,
+			u.username as username,
+			u.card_id as cardId
+		from mall_order_refund r
+        left join mall_order o on r.order_id = o.id
+        left join mall_user u on o.user_id = u.id
+		where r.id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.OrderRefundEntity">
+        select
+        r.*,
+        o.order_sn,
+        o.order_status,
+        o.actual_price,
+        o.order_price,
+        o.goods_price,
+        o.add_time,
+        o.policy_type,
+        u.username as username,
+        u.card_id as cardId
+        from mall_order_refund r
+        left join mall_order o on r.order_id = o.id
+        left join mall_user u on o.user_id = u.id
+        WHERE 1=1
+        <if test="orderSn != null and orderSn.trim() != ''">
+            AND o.order_sn LIKE concat('%',#{orderSn},'%')
+        </if>
+        <if test="orderId != null">
+            AND o.id = #{orderId}
+        </if>
+        <if test="shippingStatus != null and shippingStatus.trim() != ''">
+            AND o.shipping_status = #{shippingStatus}
+        </if>
+        <if test="payStatus != null and payStatus.trim() != ''">
+            AND o.pay_status = #{payStatus}
+        </if>
+        <if test="orderStatus != null and orderStatus.trim() != ''">
+            AND o.order_status = #{orderStatus}
+        </if>
+        <if test="noCancelStatus != null and noCancelStatus == 'true'">
+            AND o.order_status != 101
+        </if>
+        <if test="refundStatus != null">
+            AND r.refund_status = #{refundStatus}
+        </if>
+        <if test="orderType != null and orderType.trim() != ''">
+            AND o.order_type = #{orderType}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by r.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(r.id)
+        from mall_order_refund r
+        left join mall_order o on r.order_id = o.id
+        left join mall_user u on o.user_id = u.id
+        WHERE 1=1
+        <if test="orderSn != null and orderSn.trim() != ''">
+            AND o.order_sn LIKE concat('%',#{orderSn},'%')
+        </if>
+        <if test="orderId != null">
+            AND o.id = #{orderId}
+        </if>
+        <if test="shippingStatus != null and shippingStatus.trim() != ''">
+            AND o.shipping_status = #{shippingStatus}
+        </if>
+        <if test="payStatus != null and payStatus.trim() != ''">
+            AND o.pay_status = #{payStatus}
+        </if>
+        <if test="orderStatus != null and orderStatus.trim() != ''">
+            AND o.order_status = #{orderStatus}
+        </if>
+        <if test="noCancelStatus != null and noCancelStatus == 'true'">
+            AND o.order_status != 101
+        </if>
+        <if test="refundStatus != null">
+            AND r.refund_status = #{refundStatus}
+        </if>
+        <if test="orderType != null and orderType.trim() != ''">
+            AND o.order_type = #{orderType}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.OrderRefundEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_order_refund(
+			`order_id`,
+			`user_id`,
+			`refund_type`,
+			`refund_time`,
+			`creator`,
+			`refund_money`,
+			`refund_status`,
+			`approver`,
+			`approval_time`,
+			`approval_remark`)
+		values(
+			#{orderId},
+			#{userId},
+			#{refundType},
+			#{refundTime},
+			#{creator},
+			#{refundMoney},
+			#{refundStatus},
+			#{approver},
+			#{approvalTime},
+			#{approvalRemark})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.OrderRefundEntity">
+        update mall_order_refund
+        <set>
+            <if test="orderId != null">`order_id` = #{orderId},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="refundType != null">`refund_type` = #{refundType},</if>
+            <if test="refundTime != null">`refund_time` = #{refundTime},</if>
+            <if test="creator != null">`creator` = #{creator},</if>
+            <if test="refundMoney != null">`refund_money` = #{refundMoney},</if>
+            <if test="refundStatus != null">`refund_status` = #{refundStatus},</if>
+            <if test="approver != null">`approver` = #{approver},</if>
+            <if test="approvalTime != null">`approval_time` = #{approvalTime},</if>
+            <if test="approvalRemark != null">`approval_remark` = #{approvalRemark},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_order_refund where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_order_refund where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>欢迎页</title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div class="wrapper-content animated fadeIn" id="rrapp">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3>{{orderSum}}</h3>
+                    <p>所有订单</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-bag"></i>
+                </div>
+                <a onclick="vm.toOrderByShipStatus()" class="small-box-footer">详情 <i
+                        class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3>{{dfOrderSum}}</h3>
+                    <p>待发货</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-bag"></i>
+                </div>
+                <a onclick="vm.toOrderByShipStatus(0)" class="small-box-footer">详情 <i
+                        class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>{{yfOrderSum}}</h3>
+                    <p>已发货</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-bag"></i>
+                </div>
+                <a onclick="vm.toOrderByShipStatus(1)" class="small-box-footer">详情 <i
+                        class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-light-blue">
+                <div class="inner">
+                    <h3>{{yfkOrderSum}}</h3>
+                    <p>待付款</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-bag"></i>
+                </div>
+                <a onclick="vm.toOrderByPayStatus(0)" class="small-box-footer">详情 <i
+                        class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-fuchsia">
+                <div class="inner">
+                    <h3>{{thcOrderSum}}</h3>
+                    <p>退货</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-bag"></i>
+                </div>
+                <a onclick="vm.toOrderByShipStatus(4)" class="small-box-footer">详情 <i
+                        class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>{{ywcOrderSum}}</h3>
+                    <p>已完成</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-bag"></i>
+                </div>
+                <a onclick="vm.toOrderByOrderStatus(402)" class="small-box-footer">详情 <i
+                        class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3>{{userSum}}</h3>
+                    <p>所有会员</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-user-md"></i>
+                </div>
+                <a onclick="vm.toUser()" class="small-box-footer">详情 <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3>{{goodsSum}}</h3>
+                    <p>所有商品</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-ship"></i>
+                </div>
+                <a onclick="vm.toGoods()" class="small-box-footer">详情 <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3>{{commentSum}}</h3>
+                    <p>所有评论</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-commenting"></i>
+                </div>
+                <a onclick="vm.toComment()" class="small-box-footer">详情 <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3>{{ycCommentSum}}</h3>
+                    <p>隐藏评论</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-commenting"></i>
+                </div>
+                <a onclick="vm.toComment(1)" class="small-box-footer">详情 <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>{{zsCommentSum}}</h3>
+                    <p>展示评论</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-commenting"></i>
+                </div>
+                <a onclick="vm.toComment(0)" class="small-box-footer">详情 <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <!--<table class="table table-hover table-responsive table-bordered">-->
+        <!--<tr>-->
+            <!--<th colspan="5">会员购买率（会员购买率=有订单会员数+会员总数）</th>-->
+        <!--</tr>-->
+        <!--<tr style='text-align: center;'>-->
+            <!--<th>会员总数</th>-->
+            <!--<th>有订单会员数</th>-->
+            <!--<th>会员订单总数</th>-->
+            <!--<th>今日会员订单</th>-->
+            <!--<th>今日会员购物总额</th>-->
+        <!--</tr>-->
+        <!--<tr style='text-align: center;'>-->
+            <!--<td>{{orderSum}}</td>-->
+            <!--<td>3</td>-->
+            <!--<td>4</td>-->
+            <!--<td>4</td>-->
+            <!--<td>5500</td>-->
+        <!--</tr>-->
+    <!--</table>-->
+
+    <!--<table class="table table-hover table-responsive table-bordered">-->
+        <!--<tr>-->
+            <!--<th colspan="3">每会员平均订单数及购物额（每会员平均订单数=会员订单总数÷会员总数）</th>-->
+        <!--</tr>-->
+        <!--<tr style='text-align: center;'>-->
+            <!--<th>会员购物总额</th>-->
+            <!--<th>每会员订单数</th>-->
+            <!--<th>每会员购物数</th>-->
+        <!--</tr>-->
+        <!--<tr style='text-align: center;'>-->
+            <!--<td>4499.05</td>-->
+            <!--<td>0.07</td>-->
+            <!--<td>93.32</td>-->
+        <!--</tr>-->
+    <!--</table>-->
+    <!--<table class="table table-hover table-responsive table-bordered">-->
+        <!--<tr>-->
+            <!--<th>有效订单总金额：4499.05 总点击数：9218 每千点击订单数：0.43 每千点击购物额：488.02</th>-->
+        <!--</tr>-->
+    <!--</table>-->
+</div>
+
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#rrapp',
+        data: {
+            orderSum: 0,
+            dfOrderSum: 0,//待发货
+            yfOrderSum: 0,//已发货
+            yfkOrderSum: 0,//待付款
+            ywcOrderSum: 0,//已完成
+            thcOrderSum: 0,//退货
+            userSum: 0,
+            goodsSum: 0,
+            commentSum: 0,
+            zsCommentSum: 0,
+            ycCommentSum: 0
+        },
+        methods: {
+            toOrderByShipStatus: function (shippingStatus) {
+                if (!shippingStatus && shippingStatus != 0) {
+                    openWindow({
+                        top: true,
+                        type: 2,
+                        title: '订单',
+                        content: '../shop/order.html'
+                    });
+                    return;
+                }
+                let url = '../shop/order.html?shippingStatus=' + shippingStatus;
+
+                if (shippingStatus == 0) {//待发货
+                    url += '&payStatus=2';
+                    if (vm.dfOrderSum == 0) {
+                        iview.Message.error('没有数据！');
+                        return;
+                    }
+                } else if (shippingStatus == 1) {//已发货
+                    if (vm.yfOrderSum == 0) {
+                        iview.Message.error('没有数据！');
+                        return;
+                    }
+                } else if (shippingStatus == 4) {//退货
+                    if (vm.thcOrderSum == 0) {
+                        iview.Message.error('没有数据！');
+                        return;
+                    }
+                }
+
+                openWindow({
+                    top: true,
+                    type: 2,
+                    title: '订单',
+                    content: url
+                });
+            },
+            toOrderByPayStatus: function (payStatus) {
+                if (vm.yfkOrderSum == 0) {
+                    iview.Message.error('没有数据！');
+                    return;
+                }
+                openWindow({
+                    top: true,
+                    type: 2,
+                    title: '订单',
+                    content: '../shop/order.html?payStatus=' + payStatus
+                });
+            },
+            toOrderByOrderStatus: function (orderStatus) {
+                if (vm.ywcOrderSum == 0) {
+                    iview.Message.error('没有数据！');
+                    return;
+                }
+                openWindow({
+                    top: true,
+                    type: 2,
+                    title: '订单',
+                    content: '../shop/order.html?orderStatus=' + orderStatus
+                });
+            },
+            toUser: function () {
+                openWindow({
+                    top: true,
+                    type: 2,
+                    title: '会员列表',
+                    area: ['90%', '95%'],
+                    content: '../shop/shopuser.html'
+                });
+            },
+            toGoods: function () {
+                openWindow({
+                    top: true,
+                    type: 2,
+                    title: '商品',
+                    content: '../shop/goods.html'
+                });
+            },
+            toComment: function (status) {
+                if (!status && status != 0) {
+                    if (vm.commentSum == 0) {
+                        iview.Message.error('没有数据！');
+                        return;
+                    }
+                    openWindow({
+                        top: true,
+                        type: 2,
+                        title: '所有评论',
+                        content: '../shop/comment.html'
+                    });
+                } else {
+                    if (status === 0 && vm.zsCommentSum == 0) {
+                        iview.Message.error('没有数据！');
+                        return;
+                    }
+                    if (status === 1 && vm.ycCommentSum == 0) {
+                        iview.Message.error('没有数据！');
+                        return;
+                    }
+                    openWindow({
+                        top: true,
+                        type: 2,
+                        title: '评论',
+                        content: '../shop/comment.html?status=' + status
+                    });
+                }
+            }
+        },
+        created: function () {
+//            使用var声明的变量，其作用域为该语句所在的函数内，且存在变量提升现象；
+//            使用let声明的变量，其作用域为该语句所在的代码块内，不存在变量提升；
+//            使用const声明的是常量，在后面出现的代码中不能再修改该常量的值。
+//            var的作用于是函数作用于，而let是块级别（大括号括起来的内容）
+            let vue = this;
+            $.getJSON("../order/queryTotal", function (r) {
+                vue.orderSum = r.sum;
+            });
+            $.getJSON("../order/queryTotal?orderStatus=201", function (r) {
+                vue.dfOrderSum = r.sum;
+//                if (r.sum > 0) {
+//                    iview.Notice.open({
+//                        title: '您有待发货订单！', duration: 0
+//                    });
+//                    let iN = new iNotify({
+//                        effect: 'flash',
+//                        interval: 500,
+//                        message: "待发订单",
+//                        audio: {
+//                            file: ['../statics/audio/dforder.mp3']
+//                        },
+//                        notification: {
+//                            title: "通知！",
+//                            body: '您有待发订单'
+//                        }
+//                    });
+//                    iN.setTitle(true).player();
+//                }
+            });
+            $.getJSON("../order/queryTotal?shippingStatus=1", function (r) {
+                vue.yfOrderSum = r.sum;
+            });
+            $.getJSON("../order/queryTotal?orderStatus=0", function (r) {
+                vue.yfkOrderSum = r.sum;
+            });
+            $.getJSON("../order/queryTotal?orderStatus=402", function (r) {
+                vue.ywcOrderSum = r.sum;
+            });
+            $.getJSON("../order/queryTotal?shippingStatus=4", function (r) {
+                vue.thcOrderSum = r.sum;
+            });
+
+            $.getJSON("../user/queryTotal", function (r) {
+                vue.userSum = r.userSum;
+            });
+            $.getJSON("../goods/queryTotal", function (r) {
+                vue.goodsSum = r.goodsSum;
+            });
+            $.getJSON("../comment/queryTotal", function (r) {
+                vue.commentSum = r.sum;
+            });
+            $.getJSON("../comment/queryTotal?status=1", function (r) {
+                vue.ycCommentSum = r.sum;
+            });
+            $.getJSON("../comment/queryTotal?status=0", function (r) {
+                vue.zsCommentSum = r.sum;
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<view class="container">
+  <scroll-view class="topic-list" scroll-y="true" scroll-top="{{scrollTop}}">
+
+    <navigator class="group-box" wx:for="{{groupList}}" wx:key="{{item.id}}" url="../groupDetail/groupDetail?id={{item.id}}">
+      <image class="img" src="{{item.item_pic_url}}"></image>
+      <view class="imgline">
+        <view class="title">{{item.title}}</view>
+        <view class="desc">{{item.subtitle}}</view>
+        <view class="priceInfo">最低开团价：
+          <text class="price">￥{{item.retail_min_price}}</text>
+          <text class="orgPrice line-through">￥{{item.retail_price}}</text>
+        </view>
+        <view class="btn-view">
+          <view class="surplus">还剩余{{item.stock_num}}件</view>
+          <button class="btn">立即开团</button>
+        </view>
+      </view>
+    </navigator>
+
+    <view class="page" wx:if="{{showPage}}">
+      <view class="prev {{ page <= 1 ? 'disabled' : ''}}" bindtap="prevPage">上一页</view>
+      <view class="next {{ (count / size) < page +1 ? 'disabled' : ''}}" bindtap="nextPage">下一页</view>
+    </view>
+  </scroll-view>
+</view>

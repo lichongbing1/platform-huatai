@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiGoodsActivityMapper">
+
+    <resultMap type="com.platform.dto.GoodsActivityVo" id="activityMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="item_pic_url" column="item_pic_url"/>
+        <result property="market_price" column="market_price"/>
+        <result property="retail_price" column="retail_price"/>
+        <result property="retail_min_price" column="retail_min_price"/>
+        <result property="open_time" column="open_time"/>
+        <result property="end_time" column="end_time"/>
+        <result property="goods_id" column="goods_id"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <select id="queryList" resultMap="activityMap">
+        SELECT
+        *
+        FROM
+        (
+            SELECT
+                1 as type,
+                a.`id`,
+                a.`title`,
+                a.`item_pic_url`,
+                b.`market_price`,
+                a.`retail_min_price`,
+                a.`goods_id`,
+                a.`subtitle`,
+                a.`open_time`,
+                a.`end_time`,
+                b.retail_price AS retail_price
+            FROM
+              mall_goods_bargain a
+              left join mall_product_store_rela b on b.goods_id = a.goods_id
+            where  1= 1 and a.end_time > now() and b.stock_num > 0 and a.is_delete = 0
+              and b.store_id = #{store_id}
+            UNION ALL
+            SELECT
+                2 as type,
+                a.`id`,
+                a.`title`,
+                a.`item_pic_url`,
+                b.`market_price`,
+                a.`retail_min_price`,
+                a.`goods_id`,
+                a.`subtitle`,
+                a.`open_time`,
+                a.`end_time`,
+                b.retail_price AS retail_price
+            FROM
+              mall_goods_group a
+            left join mall_product_store_rela b on b.goods_id = a.goods_id
+            where 1 = 1 and a.end_time > now() and b.stock_num > 0 and a.open_status != 3
+              and b.store_id = #{store_id}
+        ) tmp
+        WHERE 1 = 1
+        <if test="type != null and type != 0">
+            and tmp.type = #{type}
+        </if>
+        order by tmp.end_time,tmp.type desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        SELECT
+        count(id)
+        FROM
+        (
+        SELECT
+        a.`id`
+        FROM
+        mall_goods_bargain a
+        LEFT JOIN mall_goods b ON b.id = a.goods_id
+        <if test="store_id != null and store_id != ''">
+            left join mall_product_store_rela s on b.id = s.goods_id
+        </if>
+        where 1 = 1
+        <if test="store_id != null and store_id != ''">
+            and s.store_id = #{store_id}
+        </if>
+        UNION ALL
+        SELECT
+        a.`id`
+        FROM
+        mall_goods_group a
+        LEFT JOIN mall_goods b ON b.id = a.goods_id
+        <if test="store_id != null and store_id != ''">
+            left join mall_product_store_rela s on b.id = s.goods_id
+        </if>
+        where 1 = 1
+        <if test="store_id != null and store_id != ''">
+            and s.store_id = #{store_id}
+        </if>
+        ) temp
+        WHERE 1 = 1
+        <if test="type != null and type != 0">
+            and tmp.type = #{type}
+        </if>
+    </select>
+</mapper>

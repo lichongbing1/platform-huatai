@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.GoodsCrashDao">
+
+    <resultMap type="com.platform.entity.GoodsCrashEntity" id="goodsCrashMap">
+        <result property="id" column="id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsCrashId" column="goods_crash_id"/>
+        <result property="productCrashId" column="product_crash_id"/>
+        <result property="retailCrashPrice" column="retail_crash_price"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.GoodsCrashEntity">
+		select
+			`id`,
+			`goods_id`,
+			`goods_crash_id`,
+			`product_crash_id`,
+			`retail_crash_price`
+		from mall_goods_crash
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.GoodsCrashEntity">
+        select
+        mall_goods_crash.id,
+        mall_goods_crash.goods_id,
+        mall_goods_crash.goods_crash_id,
+        mall_goods_crash.product_crash_id,
+        mall_goods_crash.retail_crash_price,
+        mall_goods.name goods_name,
+        ng.name goods_crash_name,
+        mall_product.goods_specification_ids goods_specification_ids
+        from mall_goods_crash
+        LEFT JOIN mall_goods ON mall_goods_crash.goods_id = mall_goods.id
+        LEFT JOIN mall_goods ng ON mall_goods_crash.goods_crash_id = ng.id
+        LEFT JOIN mall_product ON mall_product.id = mall_goods_crash.product_crash_id
+        WHERE 1=1
+        <if test="goodsName != null and goodsName.trim() != ''">
+            AND mall_goods.name LIKE concat('%',#{goodsName},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by mall_goods_crash.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_goods_crash
+        LEFT JOIN mall_goods ON mall_goods_crash.goods_id = mall_goods.id
+        WHERE 1=1
+        <if test="goodsName != null and goodsName.trim() != ''">
+            AND mall_goods.name LIKE concat('%',#{goodsName},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.GoodsCrashEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_goods_crash(
+			`goods_id`,
+			`goods_crash_id`,
+			`product_crash_id`,
+			`retail_crash_price`)
+		values(
+			#{goodsId},
+			#{goodsCrashId},
+			#{productCrashId},
+			#{retailCrashPrice})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.GoodsCrashEntity">
+        update mall_goods_crash
+        <set>
+            <if test="goodsId != null">`goods_id` = #{goodsId},</if>
+            <if test="goodsCrashId != null">`goods_crash_id` = #{goodsCrashId},</if>
+            <if test="productCrashId != null">`product_crash_id` = #{productCrashId},</if>
+            <if test="retailCrashPrice != null">`retail_crash_price` = #{retailCrashPrice}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_goods_crash where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_goods_crash where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

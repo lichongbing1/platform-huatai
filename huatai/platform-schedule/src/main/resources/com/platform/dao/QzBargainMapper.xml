@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.QzBargainMapper">
+    <select id="queryRemindBargainList" resultType="map">
+        SELECT
+        a.id,
+        a.bargain_id,
+       	a.user_id,
+        u.weixin_openid AS open_id,
+        b.end_time,
+        tmp.bargain_num,
+        g.`name`,
+        p.goods_number,
+        a.`form_id`
+        FROM
+        mall_bargain_open a
+        LEFT JOIN mall_goods_bargain b ON a.bargain_id = b.id
+        LEFT JOIN mall_goods g ON g.id = b.goods_id
+        LEFT JOIN mall_product p ON p.id = b.product_id
+        LEFT JOIN mall_user u ON a.user_id = u.id
+        LEFT JOIN (
+        SELECT
+        count(c.user_id) AS bargain_num,
+        c.open_id
+        FROM
+        mall_bargain_open_record c
+        GROUP BY
+        c.open_id
+        ) tmp ON tmp.open_id = a.id
+        WHERE a.`form_id` is not null
+        AND b.end_time > date_add(now(), INTERVAL 2 DAY)
+        AND b.end_time <![CDATA[ <  ]]>  date_add(now(), INTERVAL 3 DAY)
+    </select>
+
+    <update id="updatePastBargain">
+        UPDATE mall_bargain_open a
+        LEFT JOIN mall_goods_bargain b ON a.bargain_id = b.id
+        SET a.launch_status = 3
+        WHERE
+        b.end_time <![CDATA[ <  ]]>  now()
+        AND a.launch_status = 1
+    </update>
+</mapper>

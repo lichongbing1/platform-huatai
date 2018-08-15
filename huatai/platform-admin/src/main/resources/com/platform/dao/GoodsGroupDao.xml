@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.GoodsGroupDao">
+
+    <resultMap type="com.platform.entity.GoodsGroupEntity" id="goodsGroupMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="itemPicUrl" column="item_pic_url"/>
+        <result property="launchNum" column="launch_num"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="minOpenGroup" column="min_open_group"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="retailMinPrice" column="retail_min_price"/>
+        <result property="openTime" column="open_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="openStatus" column="open_status"/>
+        <result property="validDays" column="valid_days"/>
+        <result property="adDesc" column="ad_desc"/>
+        <result property="abbrPicUrl" column="abbr_pic_url"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.GoodsGroupEntity">
+		select
+			`id`,
+			`title`,
+			`item_pic_url`,
+			`launch_num`,
+			`goods_id`,
+			`sort_order`,
+			`min_open_group`,
+			`subtitle`,
+			`retail_min_price`,
+			`open_time`,
+			`end_time`,
+			`open_status`,
+            `ad_desc`,
+			`valid_days`,
+			`abbr_pic_url`
+		from mall_goods_group
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.GoodsGroupEntity">
+        select
+        mall_goods_group.id,
+        mall_goods_group.title,
+        mall_goods_group.item_pic_url,
+        mall_goods_group.launch_num,
+        mall_goods_group.goods_id,
+        mall_goods_group.sort_order,
+        mall_goods_group.min_open_group,
+        mall_goods_group.subtitle,
+        mall_goods_group.retail_min_price,
+        mall_goods_group.open_time,
+        mall_goods_group.end_time,
+        mall_goods_group.open_status,
+        mall_goods_group.valid_days,
+        mall_goods_group.ad_desc,
+        mall_goods_group.abbr_pic_url,
+        mall_goods.name goods_name
+        from mall_goods_group
+        LEFT JOIN mall_goods on mall_goods.id = mall_goods_group.goods_id
+        WHERE 1=1
+        <if test="title != null and title.trim() != ''">
+            AND mall_goods_group.title LIKE concat('%',#{title},'%')
+        </if>
+        <if test="subtitle != null and subtitle.trim() != ''">
+            AND mall_goods_group.subtitle LIKE concat('%',#{subtitle},'%')
+        </if>
+        <if test="goodsName != null and goodsName.trim() != ''">
+            AND mall_goods.name LIKE concat('%',#{goodsName},'%')
+        </if>
+        <if test="goodsId != null and goodsId != ''">
+            AND mall_goods_group.goods_id = #{goodsId}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_goods_group
+        LEFT JOIN mall_goods on mall_goods.id = mall_goods_group.goods_id
+        WHERE 1=1
+        <if test="title != null and title.trim() != ''">
+            AND mall_goods_group.title LIKE concat('%',#{title},'%')
+        </if>
+        <if test="subtitle != null and subtitle.trim() != ''">
+            AND mall_goods_group.subtitle LIKE concat('%',#{subtitle},'%')
+        </if>
+        <if test="goodsName != null and goodsName.trim() != ''">
+            AND mall_goods.name LIKE concat('%',#{goodsName},'%')
+        </if>
+        <if test="goodsId != null and goodsId != ''">
+            AND mall_goods_group.goods_id = #{goodsId}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.GoodsGroupEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_goods_group(
+			`title`,
+			`item_pic_url`,
+			`launch_num`,
+			`goods_id`,
+			`sort_order`,
+			`min_open_group`,
+			`subtitle`,
+			`retail_min_price`,
+			`open_time`,
+			`end_time`,
+			`open_status`,
+            `ad_desc`,
+			`valid_days`,
+			`abbr_pic_url`)
+		values(
+			#{title},
+			#{itemPicUrl},
+			#{launchNum},
+			#{goodsId},
+			#{sortOrder},
+			#{minOpenGroup},
+			#{subtitle},
+			#{retailMinPrice},
+			#{openTime},
+			#{endTime},
+			#{openStatus},
+            #{adDesc},
+			#{validDays},
+			#{abbrPicUrl})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.GoodsGroupEntity">
+        update mall_goods_group
+        <set>
+            <if test="title != null">`title` = #{title},</if>
+            <if test="itemPicUrl != null">`item_pic_url` = #{itemPicUrl},</if>
+            <if test="launchNum != null">`launch_num` = #{launchNum},</if>
+            <if test="goodsId != null">`goods_id` = #{goodsId},</if>
+            <if test="sortOrder != null">`sort_order` = #{sortOrder},</if>
+            <if test="minOpenGroup != null">`min_open_group` = #{minOpenGroup},</if>
+            <if test="subtitle != null">`subtitle` = #{subtitle},</if>
+            <if test="retailMinPrice != null">`retail_min_price` = #{retailMinPrice},</if>
+            <if test="openTime != null">`open_time` = #{openTime},</if>
+            <if test="endTime != null">`end_time` = #{endTime},</if>
+            <if test="openStatus != null">`open_status` = #{openStatus},</if>
+            <if test="validDays != null">`ad_desc` = #{adDesc},</if>
+            <if test="validDays != null">`valid_days` = #{validDays},</if>
+            <if test="abbrPicUrl != null">`abbr_pic_url` = #{abbrPicUrl}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_goods_group where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_goods_group where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

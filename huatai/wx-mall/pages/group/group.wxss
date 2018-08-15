@@ -1,0 +1,50 @@
+page ,.container{
+   width: 750rpx;
+    height: 100%;
+    overflow: hidden;
+    background: #f4f4f4;
+}
+
+
+.group-box {
+  display: flex;
+  padding: 10px 15px;
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+
+.group-box .img {
+  width: 240rpx;
+  height: 240rpx;
+}
+.group-box .title, .group-box .desc {
+  text-align: left;
+  padding: 0;
+}
+.group-box .imgline {
+  flex: 1;
+  padding-left: 10px;
+}
+.priceInfo .price {
+  color:#b4282d;
+  font-size: 40rpx;
+}
+.btn-view .btn {
+  font-size: 28rpx;
+  color: #fff;
+  background-color: #f48f18;
+  width: 200rpx;
+  margin-top: 10px;
+  float: right;
+}
+
+.btn-view .surplus {
+  float: left;
+  padding: 5px 10px;
+  background-color: #ffdf80;
+  text-align: center;
+  margin-top: 15px;
+  align-items: center;
+  font-size: 28rpx;
+  border-radius: 16px 16px 16px 16px;
+}

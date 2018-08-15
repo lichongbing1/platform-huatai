@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="share">
+    <view class="day-item" wx:for="{{shareList}}">
+
+      <view class="item" bindtouchstart="touchStart" bindtouchend="touchEnd">
+        <image class="img" src="{{item.avatar}}"></image>
+        <image class="img-goods" src="{{item.list_pic_url}}"></image>  
+        <view class="info">
+          <view class="name">{{item.nickname}}</view>
+          <view class="name">{{item.add_time}}</view>
+                    <view class="subtitle">{{item.goods_brief}}</view>
+        </view>  
+
+      </view>
+
+    </view>
+  </view>
+</view>

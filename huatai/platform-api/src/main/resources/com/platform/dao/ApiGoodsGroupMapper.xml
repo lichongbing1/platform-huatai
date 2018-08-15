@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiGoodsGroupMapper">
+
+    <resultMap type="com.platform.entity.GoodsGroupVo" id="goodsGroupMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="item_pic_url" column="item_pic_url"/>
+        <result property="abbr_pic_url" column="abbr_pic_url"/>
+        <result property="market_price" column="market_price"/>
+        <result property="retail_price" column="retail_price"/>
+        <result property="goods_id" column="goods_id"/>
+        <result property="sort_order" column="sort_order"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="open_time" column="open_time"/>
+        <result property="end_time" column="end_time"/>
+        <result property="open_status" column="open_status"/>
+        <result property="valid_days" column="valid_days"/>
+        <result property="retail_min_price" column="retail_min_price"/>
+        <result property="min_open_group" column="min_open_group"/>
+        <result property="ad_desc" column="ad_desc"/>
+        <result property="stock_num" column="stock_num"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="goodsGroupMap">
+		select
+			a.`id`,
+			a.`title`,
+			a.`item_pic_url`,
+			a.`abbr_pic_url`,
+			b.`market_price`,
+			a.`goods_id`,
+			a.`sort_order`,
+			a.`min_open_group`,
+			a.`subtitle`,
+			a.`open_time`,
+			a.`end_time`,
+			a.`open_status`,
+			a.`valid_days`,
+			a.`retail_min_price`,
+			a.`ad_desc`,
+			b.retail_price as retail_price,
+			b.stock_num
+		from mall_goods_group a
+		left join mall_product_store_rela b on b.goods_id = a.goods_id
+		where a.id = #{id}
+	</select>
+
+    <select id="queryObjectByStoreId" resultMap="goodsGroupMap">
+        select
+        a.`id`,
+        a.`title`,
+        a.`item_pic_url`,
+        a.`abbr_pic_url`,
+        b.`market_price`,
+        a.`goods_id`,
+        a.`sort_order`,
+        a.`min_open_group`,
+        a.`subtitle`,
+        a.`open_time`,
+        a.`end_time`,
+        a.`open_status`,
+        a.`valid_days`,
+        a.`retail_min_price`,
+        a.`ad_desc`,
+        b.retail_price as retail_price,
+		b.stock_num
+        from mall_goods_group a
+        left join mall_product_store_rela b on b.goods_id = a.goods_id
+        where a.id = #{id} AND b.store_id = #{storeId}
+    </select>
+
+    <select id="queryList" resultMap="goodsGroupMap">
+        select
+        a.`id`,
+        a.`title`,
+        a.`item_pic_url`,
+        a.`abbr_pic_url`,
+        b.`market_price`,
+        a.`goods_id`,
+        a.`sort_order`,
+        a.`min_open_group`,
+        a.`subtitle`,
+        a.`open_time`,
+        a.`end_time`,
+        a.`open_status`,
+        a.`valid_days`,
+        a.`retail_min_price`,
+        a.`ad_desc`,
+        b.retail_price as retail_price,
+        b.stock_num
+        from mall_goods_group a
+        left join mall_product_store_rela b on b.goods_id = a.goods_id
+        WHERE 1 = 1 and b.id is not null and a.open_status != 3 and b.stock_num > 0
+        <if test="end_time != null">
+            AND a.end_time > #{end_time}
+        </if>
+        <if test="storeId != null">
+            AND b.store_id = #{storeId}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by a.sort_order asc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select
+        count(a.id)
+        from mall_goods_group a
+        left join mall_product_store_rela b on b.goods_id = a.goods_id
+        WHERE 1 = 1 and b.id is not null and a.open_status != 3 and b.stock_num > 0
+        <if test="end_time != null">
+            AND a.end_time > #{end_time}
+        </if>
+        <if test="storeId != null">
+            AND b.store_id = #{storeId}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by a.sort_order desc
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

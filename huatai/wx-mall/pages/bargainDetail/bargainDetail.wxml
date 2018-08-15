@@ -1,0 +1,174 @@
+<scroll-view class="container" scroll-y="true">
+  <view>
+    <view wx:if="{{showNavList}}" class="modal-wrap"></view>
+    <view class="fast-nav">
+      <contact-button wx:if="{{!showNavList}}" class="contact" size="25" type="primary" session-from="weapp">
+        <text>找客服</text>
+      </contact-button>
+      <view wx:if="{{!showNavList}}" class="nav" bindtap="toggleNav">
+        <text>快捷</text>
+        <text>导航</text>
+      </view>
+      <view class="nav-list" wx:if="{{showNavList}}">
+        <view class="nav-item">
+          <text class="nav-text">首页</text>
+          <view class="nav-cell" bindtap="switchNav" data-name="index">
+            <image src="../../static/images/nav-1.png"></image>
+          </view>
+        </view>
+        <view class="nav-item">
+          <text class="nav-text">足迹</text>
+          <navigator class="nav-cell" url="../ucenter/footprint/footprint">
+            <image src="../../static/images/nav-2.png"></image>
+          </navigator>
+        </view>
+        <view class="nav-item">
+          <text class="nav-text">搜索</text>
+          <navigator class="nav-cell" url="../search/search">
+            <image src="../../static/images/nav-3.png"></image>
+          </navigator>
+        </view>
+        <view class="nav-item">
+          <text class="nav-text">购物车</text>
+          <view class="nav-cell" bindtap="switchNav" data-name="cart">
+            <image src="../../static/images/nav-4.png"></image>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{showNavList}}" class="close" bindtap="toggleNav">X</view>
+    </view>
+    <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
+      <swiper-item wx:for="{{gallery}}" wx:key="{{item.id}}">
+        <image src="{{item.img_url}}" background-size="cover"></image>
+      </swiper-item>
+    </swiper>
+    <!-- <view class="service-policy">
+      <view class="item">30分钟速达</view>
+      <view class="item">每日优选生鲜</view>
+      <view class="item">满88元免运费</view>
+    </view> -->
+    <view class="group-panel">
+      <view class="group-title">砍价</view>
+      <view class="group-desc">限时火拼·超值底价</view>
+      <view class="group-deadline" wx:if="{{!isPast}}">
+        <view class="desc">距结束仅剩</view>
+        <view class="info">
+          <text class="time-tag">{{bargainVo.dateformat.day}}</text>天
+          <text class="time-tag">{{bargainVo.dateformat.hr}}</text>时
+          <text class="time-tag">{{bargainVo.dateformat.min}}</text>分
+          <text class="time-tag">{{bargainVo.dateformat.sec}}</text>秒</view>
+      </view>
+    </view>
+    <view class="goods-info">
+      <view class="c">
+        <text class="name">{{goods.name}}</text>
+        <text class="desc">{{goods.goods_brief}}</text>
+        <view class="goods-do">
+          最低砍购价
+          <text class="price">￥{{bargainVo.retail_min_price}} </text>
+          <text class="org-price line-through">￥{{goods.retail_price}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="bargin-desc">
+      <image class="avatar" src="{{avatar}}"></image>
+      <text wx:if="{{openVo.id > 0 }}" class="desc">砍价进度：商城价<text style="color: orange;">{{goods.retail_price}}</text>元，已砍至<text style="color: #b4282d">{{openVo.retail_price}}</text>元</text>
+    </view>
+    <view wx:if="{{isPast}}" class="bargin-over">
+            本次砍价已结束
+    </view>
+    <view class="btn-group">
+      <view class="btn btn-l" bindtap="moreBargain">更多砍价商品</view>
+      <view class="btn btn-r" bindtap="mybargain">我的砍价清单</view>
+    </view>
+    <!-- 规则说明 -->
+    <view bindtap="toggleRule" class="bargin-rule">规则说明
+      <text class="toggle-arrow {{showRule?'active':''}}"></text>
+    </view>
+    <view class="bargin-rule-desc" wx:if="{{showRule}}">
+      <view>1.新用户注册即可发起砍价</view>
+      <view>2.新用户注册即可发起砍价新用户注册即可发起砍价</view>
+      <view>3.新用户注册即可发起砍价新用户注册即可发起砍价</view>
+    </view>
+    <!-- 砍价记录 -->
+    <view bindtap="toggleRecord" class="bargin-rule">砍价记录（已有{{recordList.length}}位好友帮忙砍价）
+      <text class="toggle-arrow {{showRecord?'active':''}}"></text>
+    </view>
+    <view class="bargin-record-list" wx:for="{{recordList}}" wx:key="{{index}}" wx:if="{{showRecord}}">
+      <view class="bargin-desc">
+        <image class="avatar" src="{{item.avatar}}"></image>
+        <text class="desc">{{item.nickname}}在{{item.bargain_time}}，帮忙砍掉{{item.bargain_price}}元</text>
+      </view>
+    </view>
+    <view class="comments" wx:if="{{comment.count > 0}}">
+      <view class="h">
+        <navigator url="../comment/comment?valueId={{goods.id}}&typeId=0">
+          <text class="t">评价({{comment.count > 999 ? '999+' : comment.count}})</text>
+          <text class="i">查看全部</text>
+        </navigator>
+      </view>
+      <view class="b">
+        <view class="item">
+          <view class="info">
+            <view class="user">
+              <image src="{{comment.data.avatar}}"></image>
+              <text>{{comment.data.nickname}}</text>
+            </view>
+            <view class="time">{{comment.data.add_time}}</view>
+          </view>
+          <view class="content">
+            {{comment.data.content}}
+          </view>
+          <view class="imgs" wx:if="{{comment.data.pic_list.length > 0}}">
+            <image class="img" wx:for="{{comment.data.pic_list}}" wx:key="{{item.id}}" src="{{item.pic_url}}"></image>
+          </view>
+          <!-- <view class="spec">白色 2件</view> -->
+        </view>
+      </view>
+    </view>
+
+    <view class="goods-attr">
+      <view class="t">商品参数</view>
+      <view class="l">
+        <view class="item" wx:for="{{attribute}}" wx:key="{{item.name}}">
+          <text class="left">{{item.name}}</text>
+          <text class="right">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail">
+      <import src="../../lib/wxParse/wxParse.wxml" />
+      <template is="wxParse" data="{{wxParseData:goodsDetail.nodes}}" />
+    </view>
+
+
+    <view class="common-problem">
+      <view class="h">
+        <view class="line"></view>
+        <text class="title">常见问题</text>
+      </view>
+      <view class="b">
+        <view class="item" wx:for="{{issueList}}" wx:key="{{item.id}}">
+          <view class="question-box">
+            <text class="spot"></text>
+            <text class="question">{{item.question}}</text>
+          </view>
+          <view class="answer">
+            {{item.answer}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-btn" wx:if="{{!isPast}}">
+      <form bindsubmit="openBargain" report-submit='true' wx:if="{{bargainOper==1}}">
+          <button class="r" style="width: 375rpx;" form-type="submit">我要砍价</button>
+      </form>
+      <view class="r" wx-if="{{bargainOper==2}}" bindtap="helpBargain">帮TA砍价</view>
+      <button class="r" wx-if="{{bargainOper==3}}" open-type="share">找人帮砍</button>
+      <view class="c" bindtap="checkProduct">立即购买</view>
+      <!-- <view> openVo={{openVo.id}},bargainOper={{bargainOper}} </view> -->
+    </view>
+  </view>
+</scroll-view>

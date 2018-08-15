@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiBargainOpenMapper">
+
+    <resultMap type="com.platform.entity.BargainOpenVo" id="bargainOpenMap">
+        <result property="id" column="id"/>
+        <result property="bargain_id" column="bargain_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="launch_time" column="launch_time"/>
+        <result property="launch_status" column="launch_status"/>
+        <result property="retail_price" column="retail_price"/>
+        <result property="goods_retail_price" column="goods_retail_price"/>
+        <result property="title" column="title"/>
+        <result property="item_pic_url" column="item_pic_url"/>
+        <result property="abbr_pic_url" column="abbr_pic_url"/>
+        <result property="goods_id" column="goods_id"/>
+        <result property="product_id" column="product_id"/>
+        <result property="store_id" column="store_id"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="bargain_money" column="bargain_money"/>
+        <result property="retail_min_price" column="retail_min_price"/>
+        <result property="open_time" column="open_time"/>
+        <result property="end_time" column="end_time"/>
+        <result property="market_price" column="market_price"/>
+        <result property="order_price" column="order_price"/>
+        <result property="actual_price" column="actual_price"/>
+        <result property="goods_specification_name_value" column="goods_specification_name_value"/>
+        <result property="order_id" column="order_id"/>
+        <result property="avatar" column="avatar"/>
+        <result property="nickname" column="nickname"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="bargainOpenMap">
+        SELECT
+            a.`id`,
+            a.`bargain_id`,
+            a.`user_id`,
+            a.`launch_time`,
+            a.`launch_status`,
+            a.`retail_price`,
+            a.store_id,
+            c.retail_price as goods_retail_price,
+            b.title,
+            b.item_pic_url,
+            b.abbr_pic_url,
+            b.goods_id,
+            b.product_id,
+            b.subtitle,
+            b.bargain_money,
+            b.retail_min_price,
+            b.open_time,
+            b.end_time,
+            c.`market_price`,
+            o.order_price,
+            o.actual_price,
+            b.goods_specification_name_value,
+            o.id AS order_id,
+            d.avatar,
+            d.nickname
+        FROM
+          mall_bargain_open a
+        LEFT JOIN mall_goods_bargain b ON a.bargain_id = b.id
+        LEFT JOIN mall_goods c ON c.id = b.goods_id
+        LEFT JOIN mall_user d ON d.id = a.user_id
+        LEFT JOIN mall_order o ON o.activity_id = a.id and o.order_type  = 3
+		where a.id = #{id}
+	</select>
+
+    <select id="queryObjectByStoreId" resultMap="bargainOpenMap">
+        SELECT
+        a.`id`,
+        a.`bargain_id`,
+        a.`user_id`,
+        a.`launch_time`,
+        a.`launch_status`,
+        a.`retail_price`,
+        a.store_id,
+        c.retail_price as goods_retail_price,
+        b.title,
+        b.item_pic_url,
+        b.abbr_pic_url,
+        b.goods_id,
+        b.product_id,
+        b.subtitle,
+        b.bargain_money,
+        b.retail_min_price,
+        b.open_time,
+        b.end_time,
+        c.`market_price`,
+        o.order_price,
+        o.actual_price,
+        b.goods_specification_name_value,
+        o.id AS order_id,
+        d.avatar,
+        d.nickname
+        FROM
+        mall_bargain_open a
+        LEFT JOIN mall_goods_bargain b ON a.bargain_id = b.id
+        left join mall_product_store_rela c on c.goods_id = b.goods_id
+        LEFT JOIN mall_user d ON d.id = a.user_id
+        LEFT JOIN mall_order o ON o.activity_id = a.id and o.order_type  = 3
+        where a.id = #{id} AND c.store_id = a.store_id
+    </select>
+
+    <select id="queryList" resultMap="bargainOpenMap">
+        SELECT
+        a.`id`,
+        a.`bargain_id`,
+        a.`user_id`,
+        a.`launch_time`,
+        a.`launch_status`,
+        a.`retail_price`,
+        a.store_id,
+        c.retail_price as goods_retail_price,
+        b.title,
+        b.item_pic_url,
+        b.abbr_pic_url,
+        b.goods_id,
+        b.product_id,
+        b.subtitle,
+        b.bargain_money,
+        b.retail_min_price,
+        b.open_time,
+        b.end_time,
+        c.`market_price`,
+        o.order_price,
+        o.actual_price,
+        b.goods_specification_name_value,
+        o.id AS order_id,
+        d.avatar,
+        d.nickname
+        FROM
+        mall_bargain_open a
+        LEFT JOIN mall_goods_bargain b ON a.bargain_id = b.id
+        left join mall_product_store_rela c on c.goods_id = b.goods_id
+        LEFT JOIN mall_user d ON d.id = a.user_id
+        LEFT JOIN mall_order o ON o.activity_id = a.id and o.order_type = 3
+        WHERE 1=1 AND c.store_id = a.store_id
+        <if test="bargain_id != null">
+            AND a.bargain_id = #{bargain_id}
+        </if>
+        <if test="launch_status != null">
+            AND a.launch_status = #{launch_status}
+        </if>
+        <if test="user_id != null">
+            AND a.user_id = #{user_id}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_bargain_open
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.BargainOpenVo" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_bargain_open(
+			`bargain_id`,
+			`user_id`,
+			`launch_time`,
+			`order_id`,
+			`launch_status`,
+			`retail_price`,
+			`store_id`
+			)
+		values(
+			#{bargain_id},
+			#{user_id},
+			#{launch_time},
+			#{order_id},
+			#{launch_status},
+			#{retail_price},
+			#{store_id}
+			)
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.BargainOpenVo">
+        update mall_bargain_open
+        <set>
+            <if test="bargain_id != null">`bargain_id` = #{bargain_id},</if>
+            <if test="user_id != null">`user_id` = #{user_id},</if>
+            <if test="launch_time != null">`launch_time` = #{launch_time},</if>
+            <if test="order_id != null">`order_id` = #{order_id},</if>
+            <if test="launch_status != null">`launch_status` = #{launch_status},</if>
+            <if test="retail_price != null">`retail_price` = #{retail_price},</if>
+            <if test="store_id != null">`store_id` = #{store_id},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_bargain_open where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_bargain_open where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

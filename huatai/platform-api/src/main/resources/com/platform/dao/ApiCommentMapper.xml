@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiCommentMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.platform.entity.CommentVo" id="commentMap">
+        <result property="id" column="id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="valueId" column="value_id"/>
+        <result property="valueName" column="value_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="goodsSpecificationNameValue" column="goods_specification_name_value"/>
+        <result property="status" column="status"/>
+        <result property="content" column="content"/>
+        <result property="addTime" column="add_time"/>
+        <result property="evalLevel" column="eval_level"/>
+        <result property="deliveryLevel" column="delivery_level"/>
+        <result property="goodsLevel" column="goods_level"/>
+        <result property="goodsLevel" column="goods_level"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="commentMap">
+		select * from mall_comment where id = #{value}
+	</select>
+
+    <select id="queryList" resultMap="commentMap">
+        select distinct c.* from mall_comment c
+        <if test="hasPic != null and hasPic == 1">
+            left join mall_comment_picture cp on cp.comment_id = c.id
+        </if>
+        where 1 = 1 and c.status = 1
+        <if test="type_id != null and type_id != ''">
+            and c.type_id = #{type_id}
+        </if>
+        <if test="value_id != null and value_id != ''">
+            and c.value_id = #{value_id}
+        </if>
+        <if test="goods_id != null and goods_id != ''">
+            and c.value_id = #{goods_id}
+        </if>
+        <if test="user_id != null and user_id != ''">
+            and c.user_id = #{user_id}
+        </if>
+        <if test="hasPic != null and hasPic == 1">
+            and cp.id is not null
+        </if>
+        <if test="orderId != null and orderId!= 0">
+            and c.order_id = #{orderId}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(c.id)
+        from mall_comment c
+        <if test="hasPic != null and hasPic == 1">
+            left join mall_comment_picture cp on cp.comment_id = c.id
+        </if>
+        where 1= 1  and c.status = 1
+        <if test="type_id != null and type_id != ''">
+            and c.type_id = #{type_id}
+        </if>
+        <if test="value_id != null and value_id != ''">
+            and c.value_id = #{value_id}
+        </if>
+        <if test="goods_id != null and goods_id != ''">
+            and c.value_id = #{goods_id}
+        </if>
+        <if test="user_id != null and user_id != ''">
+            and c.user_id = #{user_id}
+        </if>
+        <if test="hasPic != null and hasPic == 1">
+            and cp.id is not null
+        </if>
+        <if test="orderId != null and orderId!= 0">
+            and c.order_id = #{orderId}
+        </if>
+    </select>
+
+    <select id="queryhasPicTotal" resultType="int">
+        select count(distinct c.id) from mall_comment c
+        left join mall_comment_picture cp on cp.comment_id = c.id
+        where 1= 1 and cp.id > 0  and c.status = 1
+        <if test="type_id != null and type_id != ''">
+            and c.type_id = #{type_id}
+        </if>
+        <if test="value_id != null and value_id != ''">
+            and c.value_id = #{value_id}
+        </if>
+        <if test="orderId != null and orderId!= 0">
+            and c.order_id = #{orderId}
+        </if>
+    </select>
+
+
+    <insert id="save" parameterType="com.platform.entity.CommentVo" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_comment(
+			`type_id`,
+			`value_id`,
+			`value_name`,
+			`user_id`,
+			`order_id`,
+			`product_id`,
+			`goods_specification_name_value`,
+			`status`,
+			`content`,
+			`add_time`,
+			`eval_level`,
+			`delivery_level`,
+			`goods_level`)
+		values(
+			#{typeId},
+			#{valueId},
+			#{valueName},
+			#{userId},
+			#{orderId},
+			#{productId},
+			#{goodsSpecificationNameValue},
+			#{status},
+			#{content},
+			#{addTime},
+			#{evalLevel},
+			#{deliveryLevel},
+			#{goodsLevel})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.CommentVo">
+        update mall_comment
+        <set>
+            <if test="typeId != null">`type_id` = #{typeId}, </if>
+            <if test="valueId != null">`value_id` = #{valueId}, </if>
+            <if test="valueName != null">`value_name` = #{valueName}, </if>
+            <if test="userId != null">`user_id` = #{userId}, </if>
+            <if test="orderId != null">`order_id` = #{orderId}, </if>
+            <if test="productId != null">`product_id` = #{productId}, </if>
+            <if test="goodsSpecificationNameValue != null">`goods_specification_name_value` = #{goodsSpecificationNameValue}, </if>
+            <if test="status != null">`status` = #{status}, </if>
+            <if test="content != null">`content` = #{content}, </if>
+            <if test="evalLevel != null">`eval_level` = #{evalLevel}, </if>
+            <if test="deliveryLevel != null">`delivery_level` = #{deliveryLevel}, </if>
+            <if test="goodsLevel != null">`goods_level` = #{goodsLevel}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from mall_comment where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from mall_comment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryOrderTotal" resultType="map">
+        SELECT
+        b.eval_level as evalLevel,
+        sum(a.actual_price) as actualPrice,
+        count(a.id) as orderNums
+        FROM mall_order a
+        LEFT JOIN mall_comment b ON a.id = b.order_id
+        WHERE
+        a.order_status = 301
+        <if test="user_id != null">
+            and a.user_id = #{user_id}
+        </if>
+        <if test="startDate!=null">
+            AND a.add_time >= #{startDate}
+        </if>
+        <if test="endDate!=null">
+            AND a.add_time  <![CDATA[ < ]]>   #{endDate}
+        </if>
+        GROUP BY b.eval_level
+    </select>
+
+</mapper>

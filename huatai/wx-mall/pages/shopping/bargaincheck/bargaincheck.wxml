@@ -1,0 +1,70 @@
+<view class="container">
+  <view class="address-box">
+    <view class="address-item" bindtap="selectAddress">
+      <view class="l">
+        <text class="name">{{addressVo.userName}}</text>
+      </view>
+      <view class="m">
+        <text class="mobile">{{addressVo.telNumber}}</text>
+        <text class="address">{{addressVo.provinceName +addressVo.cityName +addressVo.countyName + addressVo.detailInfo?addressVo.provinceName +addressVo.cityName +addressVo.countyName + addressVo.detailInfo:'选择地址'}}</text>
+      </view>
+      <view class="r">
+        <image src="/static/images/address_right.png"></image>
+      </view>
+    </view>
+    <view class="address-item address-empty" bindtap="addAddress" wx:if="{{addressVo.id <= 0}}">
+      <view class="m">
+        还没有收货地址，去添加
+      </view>
+      <view class="r">
+        <image src="/static/images/address_right.png"></image>
+      </view>
+    </view>
+  </view>
+
+  <view class="order-box">
+   <view class="section">
+        <view class="l">
+          <text class="remark">留言</text>
+        </view>
+        <textarea class="textarea" maxlength="60" bindblur="bindPostscriptBlur" auto-height placeholder="请输入留言信息" />
+      </view>
+    <view class="order-item">
+      <view class="l">
+        <text class="name">商品合计</text>
+      </view>
+      <view class="r">
+        <text class="txt">￥{{orderPrice}}</text>
+      </view>
+    </view>
+    <view class="order-item">
+      <view class="l">
+        <text class="name">配送费</text>
+      </view>
+      <view class="r">
+        <text class="txt">￥{{freightPrice}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="goods-items">
+    <view class="item">
+      <view class="img">
+        <image src="{{goodsVo.list_pic_url}}"></image>
+      </view>
+      <view class="info">
+        <view class="t">
+          <text class="name">{{goodsVo.goods_name}}</text>
+          <text class="number">x{{number}}</text>
+        </view>
+        <view class="m">{{null==productVo.goods_specification_name_value?"":productVo.goods_specification_name_value}}</view>
+        <view class="b">￥{{goodsPrice}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="order-total">
+    <view class="l">实付：￥{{actualPrice}}</view>
+    <view class="r" bindtap="submitOrder">去付款</view>
+  </view>
+</view>

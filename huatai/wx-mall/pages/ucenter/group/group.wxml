@@ -1,0 +1,234 @@
+<view class="container">
+  <view class="tab-bar">
+    <view wx:for="{{tabList}}" wx:key="{{index}}" bindtap="toggleTab" data-index="{{index}}" class="tab-bar-item {{ index == tabIndex ? 'active' : '' }}">{{ item }}</view>
+  </view>
+  <swiper current="{{tabIndex}}" bindchange="swiperChange" style="height: 92vh;">
+    <!-- 全部 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:for="{{openList}}" wx:key="{{index}}">
+          <view wx:if="{{item.attend_status==0}}" class="panel-head">
+            <text class="desc">待付款</text>
+            <text class="deadline">剩 {{item.dateformat.day}}天{{item.dateformat.hr}}小时{{item.dateformat.min}}分{{item.dateformat.sec}}秒</text>
+          </view>
+          <view wx:if="{{item.attend_status==1}}" class="panel-head">
+            <text class="desc">拼团中，还差{{item.min_open_group-item.attend_num}}人成团</text>
+            <text class="deadline">剩 {{item.dateformat.day}}天{{item.dateformat.hr}}小时{{item.dateformat.min}}分{{item.dateformat.sec}}秒</text>
+          </view>
+          <view wx:if="{{item.attend_status==2}}" class="panel-head">
+            <text class="desc">拼团完成</text>
+          </view>
+          <view wx:if="{{item.attend_status==3}}" class="panel-head">
+            <text class="desc">拼团失败</text>
+          </view>
+          <view class="panel-body">
+            <!-- <view class="title">{{item.title}}</view> -->
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+                <view class="num">x{{item.number}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，合计
+              <text style="color: #FF5778">￥{{item.order_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator url="../../joinGroup/joinGroup?openId={{item.open_id}}&groupId={{item.group_id}}&goodsId={{group.goods_id}}&min_open_group={{item.min_open_group}}&attend_num={{item.attend_num}}&end_time={{item.end_time}}">
+              <button class="btn btn-l">拼团详情</button>
+            </navigator>
+            <navigator url="../../joinGroup/joinGroup?openId={{item.open_id}}&groupId={{item.group_id}}&goodsId={{group.goods_id}}&min_open_group={{item.min_open_group}}&attend_num={{item.attend_num}}&end_time={{item.end_time}}">
+              <button wx:if="{{item.attend_status==1}}" class="btn btn-r">邀请参团</button>
+            </navigator>
+            <navigator url="/pages/pay/pay?orderId={{item.order_id}}&actualPrice={{item.actual_price}}">
+              <button wx:if="{{item.attend_status==0}}" class="btn btn-r">去支付</button>
+            </navigator>
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{openList.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无拼团信息</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+    <!-- 待付款 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:if="{{openList0.length>0}}" wx:for="{{openList0}}" wx:key="{{index}}">
+          <view class="panel-head">
+            <text class="desc">待付款</text>
+            <text class="deadline">剩 {{item.dateformat.day}}天{{item.dateformat.hr}}小时{{item.dateformat.min}}分{{item.dateformat.sec}}秒</text>
+          </view>
+          <view class="panel-body">
+            <!-- <view class="title">{{item.title}}</view> -->
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+                <view class="num">x{{item.number}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，合计
+              <text style="color: #FF5778">￥{{item.order_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator url="../../joinGroup/joinGroup?openId={{item.open_id}}&groupId={{item.group_id}}&goodsId={{group.goods_id}}&min_open_group={{item.min_open_group}}&attend_num={{item.attend_num}}&end_time={{item.end_time}}">
+              <button class="btn btn-l">拼团详情</button>
+            </navigator>
+            <navigator url="/pages/pay/pay?orderId={{item.order_id}}&actualPrice={{item.actual_price}}">
+              <button wx:if="{{item.attend_status==0}}" class="btn btn-r">去支付</button>
+            </navigator>
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{openList0.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无待付款拼团</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+    <!-- 拼团中 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:if="{{openList1.length>0}}" wx:for="{{openList1}}" wx:key="{{index}}">
+          <view class="panel-head">
+            <text class="desc">拼团中，还差{{item.min_open_group-item.attend_num}}人成团</text>
+            <text class="deadline">剩 {{item.dateformat.day}}天{{item.dateformat.hr}}小时{{item.dateformat.min}}分{{item.dateformat.sec}}秒</text>
+          </view>
+          <view class="panel-body">
+            <!-- <view class="title">{{item.title}}</view> -->
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+                <view class="num">x{{item.number}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，合计
+              <text style="color: #FF5778">￥{{item.order_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator url="../../joinGroup/joinGroup?openId={{item.open_id}}&groupId={{item.group_id}}&goodsId={{group.goods_id}}&min_open_group={{item.min_open_group}}&attend_num={{item.attend_num}}&end_time={{item.end_time}}">
+              <button class="btn btn-l">拼团详情</button>
+            </navigator>
+
+            <navigator url="../../joinGroup/joinGroup?openId={{item.open_id}}&groupId={{item.group_id}}&goodsId={{group.goods_id}}&min_open_group={{item.min_open_group}}&attend_num={{item.attend_num}}&end_time={{item.end_time}}">
+              <button class="btn btn-r">邀请参团</button>
+            </navigator>
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{openList1.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无拼团中信息</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+    <!-- 拼团成功 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:if="{{openList2.length>0}}" wx:for="{{openList2}}" wx:key="{{index}}">
+          <view class="panel-body">
+            <!-- <view class="title">{{item.title}}</view>  -->
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+                <view class="num">x{{item.number}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，合计
+              <text style="color: #FF5778">￥{{item.order_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator url="../../joinGroup/joinGroup?openId={{item.open_id}}&groupId={{item.group_id}}&goodsId={{group.goods_id}}&min_open_group={{item.min_open_group}}&attend_num={{item.attend_num}}&end_time={{item.end_time}}">
+              <button class="btn btn-l">拼团详情</button>
+            </navigator>
+            <!-- <button class="btn btn-r">邀请参团</button> -->
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{openList2.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无拼团成功信息</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+    <!-- 拼团失败 -->
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: 100%;">
+        <view class="group-panel" wx:if="{{openList3.length>0}}" wx:for="{{openList3}}" wx:key="{{index}}">
+          <view class="panel-body">
+            <!-- <view class="title">{{item.title}}</view>  -->
+            <view class="box">
+              <image class="l" src="{{item.abbr_pic_url}}"></image>
+              <view class="m">
+                <view class="desc">{{item.title}}</view>
+                <view class="attr">{{null!=item.goods_specification_name_value?item.goods_specification_name_value:""}}</view>
+              </view>
+              <view class="r">
+                <view class="price">￥{{item.retail_price}}</view>
+                <view class="min-price">￥{{item.retail_min_price}}</view>
+                <view class="num">x{{item.number}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="panel-foot">
+            <view class="desc">免配送费，合计
+              <text style="color: #FF5778">￥{{item.order_price}}</text>
+            </view>
+          </view>
+          <view class="btn-group">
+            <navigator url="../../joinGroup/joinGroup?openId={{item.open_id}}&groupId={{item.group_id}}&goodsId={{group.goods_id}}&min_open_group={{item.min_open_group}}&attend_num={{item.attend_num}}&end_time={{item.end_time}}">
+              <button class="btn btn-l">拼团详情</button>
+            </navigator>
+            <!-- <button class="btn btn-r">邀请参团</button> -->
+          </view>
+        </view>
+        <view class="group-panel" wx:if="{{openList3.length<=0}}">
+          <view class="no-data">
+            <image src="/static/images/tip-null.png"></image>
+            <text>暂无拼团失败信息</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+  </swiper>
+</view>

@@ -1,0 +1,96 @@
+<view class="container">
+<view class="cart-panel" wx:if="{{footCart.goodsCount>0}}">
+    <view class="cart-icon">
+      <navigator class="nav-cell" open-type='switchTab' url="/pages/cart/cart">
+        <image src="../../static/images/cart-fixed.png">
+        </image>
+      </navigator>
+      <view class="cart-num">{{footCart.goodsCount}}</view>
+    </view>
+    <view class="cart-body">￥{{footCart.checkedGoodsAmount}}</view>
+    <navigator class="nav-cell" open-type='switchTab' url="/pages/cart/cart">
+      <view class="cart-pay">去结算 > </view>
+    </navigator>
+  </view>
+  <view wx:if="{{showNavList}}" class="modal-wrap"></view>
+  <view class="fast-nav">
+    <contact-button wx:if="{{!showNavList}}" class="contact" size="25" type="primary" session-from="weapp">
+      <text>找客服</text>
+    </contact-button>
+    <view wx:if="{{!showNavList}}" class="nav" bindtap="toggleNav">
+      <text>快捷</text>
+      <text>导航</text>
+    </view>
+    <view class="nav-list" wx:if="{{showNavList}}">
+      <view class="nav-item">
+        <text class="nav-text">首页</text>
+        <view class="nav-cell" bindtap="switchNav" data-name="index">
+          <image src="../../static/images/nav-1.png"></image>
+        </view>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">足迹</text>
+        <navigator class="nav-cell" url="../ucenter/footprint/footprint">
+          <image src="../../static/images/nav-2.png"></image>
+        </navigator>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">搜索</text>
+        <navigator class="nav-cell" url="../search/search">
+          <image src="../../static/images/nav-3.png"></image>
+        </navigator>
+      </view>
+      <view class="nav-item">
+        <text class="nav-text">购物车</text>
+        <view class="nav-cell" bindtap="switchNav" data-name="cart">
+          <image src="../../static/images/nav-4.png"></image>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{showNavList}}" class="close" bindtap="toggleNav">X</view>
+  </view>
+  <view class="brand-info">
+    <view class="name">
+      <image class="img" src="{{bannerInfo.img_url}}" background-size="cover"></image>
+      <view class="info-box">
+        <view class="info">
+          <text class="txt">{{bannerInfo.name}}</text>
+          <text class="line"></text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="sort">
+    <view class="sort-box">
+      <view class="item {{currentSortType == 'default' ? 'active' : ''}}" bindtap="openSortFilter" id="defaultSort">
+        <text class="txt">综合</text>
+      </view>
+      <view class="item by-price {{currentSortType == 'price' ? 'active' : ''}} {{currentSortOrder == 'asc'  ? 'asc' : 'desc'}}" bindtap="openSortFilter" id="priceSort">
+        <text class="txt">价格</text>
+      </view>
+      <view class="item {{currentSortType == 'category' ? 'active' : ''}}" bindtap="openSortFilter" id="categoryFilter">
+        <text class="txt">分类</text>
+      </view>
+    </view>
+    <view class="sort-box-category" wx-if="{{categoryFilter}}">
+      <view class="item {{item.checked ? 'active' : ''}}" wx:for="{{filterCategory}}" wx:key="cate-{{item.id}}" data-category-index="{{index}}" bindtap="selectCategory">{{item.name}}</view>
+    </view>
+  </view>
+  <view class="cate-item">
+    <view class="b">
+      <block wx:for="{{goodsList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="unique">
+        <view class="item {{iindex % 2 == 0 ? 'item-b' : '' }}">
+
+          <navigator url="../goods/goods?id={{iitem.id}}">
+            <image class="img" src="{{iitem.list_pic_url}}" background-size="cover"></image>
+            <text class="name">{{iitem.name}}</text>
+          </navigator>
+
+          <view class="price">￥{{iitem.retail_price}}
+            <image class="cart" src="/static/images/cart.png" data-goods-id="{{iitem.id}}" data-product-id="{{iitem.product_id}}" bindtap='addNumber' background-size="cover"></image>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

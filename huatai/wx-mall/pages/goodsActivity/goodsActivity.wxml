@@ -1,0 +1,42 @@
+<view class="container">
+  <scroll-view class="topic-list" scroll-y="true" scroll-top="{{scrollTop}}">
+    <view class="item" wx:for="{{activityList}}" wx:key="{{item.id}}">
+      <view class="imgtt" wx:if="{{item.type==1}}">
+        <navigator url="../bargainDetail/bargainDetail?bargainId={{item.id}}">
+          <image class="img" src="{{item.item_pic_url}}"></image>
+          <view class="imgline">
+            <view class="priceInfo">最低砍购价：
+              <text class="price">￥{{item.retail_min_price}}</text>
+              <text class="orgPrice line-through">￥{{item.retail_price}}</text>
+            </view>
+            <view class="right">
+              <button class="btn">立即开砍</button>
+            </view>
+          </view>
+        </navigator>
+      </view>
+      <view class="imgtt" wx:if="{{item.type==2}}">
+        <navigator url="../groupDetail/groupDetail?id={{item.id}}">
+          <image class="img" src="{{item.item_pic_url}}"></image>
+          <view class="imgline">
+            <view class="priceInfo">最低开团价：
+              <text class="price">￥{{item.retail_min_price}}</text>
+              <text class="orgPrice line-through">￥{{item.retail_price}}</text>
+            </view>
+            <view class="right">
+              <button class="btn" data-goods-id="{{item.goods_id}}">立即开团</button>
+            </view>
+          </view>
+        </navigator>
+      </view>
+      <view class="info">
+        <text class="title">{{item.title}}</text>
+        <text class="desc">{{item.subtitle}}</text>
+      </view>
+    </view>
+    <view class="page" wx:if="{{showPage}}">
+      <view class="prev {{ page <= 1 ? 'disabled' : ''}}" bindtap="prevPage">上一页</view>
+      <view class="next {{ (count / size) < page +1 ? 'disabled' : ''}}" bindtap="nextPage">下一页</view>
+    </view>
+  </scroll-view>
+</view>

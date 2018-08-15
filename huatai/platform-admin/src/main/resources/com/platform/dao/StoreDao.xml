@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.StoreDao">
+
+    <resultMap type="com.platform.entity.StoreEntity" id="storeMap">
+        <result property="id" column="id"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeNumber" column="store_number"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="provinceName" column="province_name"/>
+        <result property="cityName" column="city_name"/>
+        <result property="countyName" column="county_name"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="coverRadius" column="cover_radius"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.platform.entity.StoreEntity">
+		select
+			`id`,
+			`store_name`,
+			`store_number`,
+			`store_address`,
+			`province_name`,
+			`city_name`,
+			`county_name`,
+			`latitude`,
+			`longitude`,
+			`cover_radius`,
+			`remark`
+		from mall_store
+		where id = #{id}
+	</select>
+
+	<select id="queryObjectByName" resultType="com.platform.entity.StoreEntity">
+		select
+		`id`,
+		`store_name`,
+		`store_number`,
+		`store_address`,
+		`province_name`,
+		`city_name`,
+		`county_name`,
+		`latitude`,
+		`longitude`,
+		`cover_radius`,
+		`remark`
+		from mall_store
+		where store_name = #{storeName}
+	</select>
+
+	<select id="queryList" resultType="com.platform.entity.StoreEntity">
+		select
+    		`id`,
+    		`store_name`,
+    		`store_number`,
+    		`store_address`,
+    		`province_name`,
+    		`city_name`,
+    		`county_name`,
+    		`latitude`,
+    		`longitude`,
+    		`cover_radius`,
+    		`remark`
+		from mall_store
+		WHERE 1=1
+		<if test="storeName != null and storeName.trim() != ''">
+			AND store_name LIKE concat('%',#{storeName},'%')
+		</if>
+		<if test="storeNumber != null and storeNumber.trim() != ''">
+			AND storeNumber LIKE concat('%',#{store_number},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from mall_store
+		WHERE 1=1
+		<if test="storeName != null and storeName.trim() != ''">
+			AND store_name LIKE concat('%',#{storeName},'%')
+		</if>
+		<if test="storeNumber != null and storeNumber.trim() != ''">
+			AND storeNumber LIKE concat('%',#{store_number},'%')
+		</if>
+	</select>
+	 
+	<insert id="save" parameterType="com.platform.entity.StoreEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_store(
+			`store_name`,
+			`store_number`,
+			`store_address`,
+			`province_name`,
+			`city_name`,
+			`county_name`,
+			`latitude`,
+			`longitude`,
+			`cover_radius`,
+			`remark`)
+		values(
+			#{storeName},
+			#{storeNumber},
+			#{storeAddress},
+			#{provinceName},
+			#{cityName},
+			#{countyName},
+			#{latitude},
+			#{longitude},
+			#{coverRadius},
+			#{remark})
+	</insert>
+	 
+	<update id="update" parameterType="com.platform.entity.StoreEntity">
+		update mall_store
+		<set>
+			<if test="storeName != null">`store_name` = #{storeName}, </if>
+			<if test="storeNumber != null">`store_number` = #{storeNumber}, </if>
+			<if test="storeAddress != null">`store_address` = #{storeAddress}, </if>
+			<if test="provinceName != null">`province_name` = #{provinceName}, </if>
+			<if test="cityName != null">`city_name` = #{cityName}, </if>
+			<if test="countyName != null">`county_name` = #{countyName}, </if>
+			<if test="latitude != null">`latitude` = #{latitude}, </if>
+			<if test="longitude != null">`longitude` = #{longitude}, </if>
+			<if test="coverRadius != null">`cover_radius` = #{coverRadius}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from mall_store where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from mall_store where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

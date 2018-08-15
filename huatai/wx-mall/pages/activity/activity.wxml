@@ -1,0 +1,48 @@
+<view class="container">
+  <scroll-view class="form-box" scroll-y="true" scroll-top="{{scrollTop}}">
+
+    <view class="wrapper">
+      <view class="t-banner">
+        <image src="http://image.meiping123.com/upload/20180104/1042071227869d.gif" background-size="cover"></image>
+      </view>
+    </view>
+
+    <view class="coupon-list" wx:for="{{couponList}}" wx:key="{{item.id}}" bindtap="" data-coupon-id="{{item.id}}">
+      <view class="item">
+        <view class="tag" wx:if="{{item.send_type==4}}">新人专享</view>
+        <view class="content">
+          <view class="left">
+            <view class="name">{{item.name}}</view>
+            <view class="time">{{item.use_start_date}}-{{item.use_end_date}}</view>
+          </view>
+          <!-- <view class="right">  -->
+          <!-- <button class="go">去使用</button> -->
+          <!-- </view> -->
+        </view>
+        <view class="condition" wx:if="{{item.coupon_txt}}">
+          <text class="txt">{{item.coupon_txt}}</text>
+          <image src="https://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/couponArrow-71315b4145.png" class="icon"></image>
+        </view>
+      </view>
+    </view>
+
+    <view class="content-bg margin-gap">
+      <view class="rule">
+        <view class="sec-sub-title">活动规则</view>
+        <ul class="act-rules">
+          <li>1.下单即可分享红包给小伙伴</li>
+          <li></li>
+          <li>2.每个链接会按领取顺序随机发放一个大额红包</li>
+          <li></li>
+          <li>3.每人每个链接仅限领取1次</li>
+          <li></li>
+          <li>4.红包仅限在线支付使用</li>
+          <li></li>
+          <li>5.其他未尽事宜，请咨询客服</li>
+          <li></li>
+        </ul>
+      </view>
+    </view>
+    <view class="blank"> </view>
+  </scroll-view>
+</view>

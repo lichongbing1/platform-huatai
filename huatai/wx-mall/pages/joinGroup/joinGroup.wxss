@@ -1,0 +1,354 @@
+.container {
+ position: relative;
+}
+.backhome {
+    position: fixed;
+    top: 10px;
+    right: 0;
+    background-color: rgba(0,0,0,0.5);
+    padding: 2px 5px;
+    font-size: 28rpx;
+    border-radius: 16px 0 0 16px;
+    display: flex;
+    align-items: center;
+    z-index: 500;
+}
+.backhome text {
+  color: #fff;
+}
+.backhome image {
+  width: 15px;
+  height: 15px;
+}
+.goods-info{
+  display: flex;
+  height: 300rpx;
+  background-color: #fff;
+}
+
+.goods-info .goods-pic{
+  width: 240rpx;
+  height: 240rpx;
+  margin-top: 30rpx;
+}
+.goods-info .goods-desc{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.goods-info .goods-desc .goods-title{
+  display: inline-block;
+  width: 500rpx;
+  padding: 20rpx;
+}
+
+.goods-info .goods-desc .min-price{
+  font-size: 50rpx;
+  color: #FF5778;
+  padding: 0 20rpx;
+}
+
+.goods-info .goods-desc .price{
+  text-decoration: line-through;
+  color: #999;
+}
+
+.goods-info .goods-desc .price-tag{
+  margin: 10rpx;
+}
+
+.goods-info .goods-desc .price-tag text{
+  background-color: #FFE7E7;
+  color: #FF5778;
+  padding: 10rpx;
+  margin: 10rpx;
+  border-radius: 10rpx;
+}
+
+.group-info{
+  width: 90%;
+  margin: 30rpx auto;
+  background-color: #FFE7E7;
+  position: relative;
+}
+
+.group-info::after{
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 20rpx solid transparent;
+  border-right: 20rpx solid transparent;
+  border-bottom: 20rpx solid #FFE7E7;
+  top: -18rpx;
+  left: 50%;
+  margin-left: -20rpx;
+}
+
+.group-info .desc{
+  text-align: center;
+  font-size: 30rpx;
+  padding: 20rpx;
+  font-weight: bold;
+}
+
+.group-info .desc text{
+  font-size: 40rpx;
+  color: #FF5778;
+  padding: 0 10rpx;
+}
+
+.group-info .deadline{
+  text-align: center;
+  color: #555;
+}
+
+.group-info .deadline text{
+  color: #FF5778;
+  padding: 0 15rpx;
+}
+
+.group-info .member{
+  padding: 20rpx;
+  text-align: center;
+}
+.group-info .member .member-item{
+  display: inline-block;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  margin: 10rpx;
+  background-color: #fff;
+}
+
+.group-info .member .member-chief{
+  position: relative;
+  border: 1px solid #FF5778;
+}
+.group-info .member .member-group{
+  border: 1px solid #FF5778;
+}
+
+.group-info .member .member-chief::after{
+  position: absolute;
+  display: block;
+  width: 60rpx;
+  height: 30rpx;
+  line-height: 30rpx;
+  content: '团长';
+  color: #fff;
+  background-color: #FF5778;
+  left: 50%;
+  margin-left: -29rpx;
+  bottom: -15rpx;
+  font-size: 20rpx;
+  border-radius: 20rpx;
+}
+.group-info .member .member-cell{
+  text-align: center;
+  line-height: 80rpx;
+  font-size: 60rpx;
+  color: #FFC0CB;
+  border: 1px dashed #FF5778;
+  vertical-align: top;
+}
+
+.share-btn{
+  background-color: #07AF12;
+  width: 400rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 35rpx;
+  color: #fff;
+  border-radius: 50rpx;
+  margin: 50rpx auto;
+}
+
+.share-btn image{
+  width: 60rpx;
+  height: 60rpx;
+  margin: 20rpx;
+  vertical-align: top;
+}
+.join-btn{
+  background-color: #FF5778;
+  width: 90%;
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 35rpx;
+  color: #fff;
+  border-radius: 10rpx;
+  margin: 20rpx auto;
+}
+.attr-pop {
+  width: 100%;
+  height: auto;
+  padding: 31.25rpx;
+  background: #fff;
+  position: fixed;
+  bottom: 100rpx;
+  z-index: 999;
+}
+
+.attr-close{
+  float: right;
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  font-size: 50rpx;
+  text-align: center;
+}
+
+.attr-pop .img-info {
+  width: 687.5rpx;
+  height: 177rpx;
+  overflow: hidden;
+  margin-bottom: 41.5rpx;
+}
+
+.attr-pop .img {
+  float: left;
+  height: 177rpx;
+  width: 177rpx;
+  background: #f4f4f4;
+  margin-right: 31.25rpx;
+}
+
+.attr-pop .info {
+  float: left;
+  height: 177rpx;
+  display: flex;
+  align-items: center;
+}
+
+.attr-pop .p {
+  font-size: 33rpx;
+  color: #333;
+  height: 33rpx;
+  line-height: 33rpx;
+  margin-bottom: 10rpx;
+}
+
+.attr-pop .a {
+  font-size: 29rpx;
+  color: #333;
+  height: 40rpx;
+  line-height: 40rpx;
+}
+
+.spec-con {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.spec-con .name {
+  height: 32rpx;
+  margin-bottom: 22rpx;
+  font-size: 29rpx;
+  color: #333;
+}
+
+.spec-con .values {
+  height: auto;
+  margin-bottom: 31.25rpx;
+  font-size: 0;
+}
+
+.spec-con .value {
+  display: inline-block;
+  height: 62rpx;
+  padding: 0 35rpx;
+  line-height: 56rpx;
+  text-align: center;
+  margin-right: 25rpx;
+  margin-bottom: 16.5rpx;
+  border: 1px solid #333;
+  font-size: 25rpx;
+  color: #333;
+}
+
+.spec-con .value.disable {
+  border: 1px solid #ccc;
+  color: #ccc;
+}
+
+.spec-con .value.selected {
+  border: 1px solid #b4282d;
+  color: #b4282d;
+}
+
+.number-item .selnum {
+  width: 322rpx;
+  height: 71rpx;
+  border: 1px solid #ccc;
+  display: flex;
+}
+
+.number-item .cut {
+  width: 93.75rpx;
+  height: 100%;
+  text-align: center;
+  line-height: 65rpx;
+}
+
+.number-item .number {
+  flex: 1;
+  height: 100%;
+  text-align: center;
+  line-height: 68.75rpx;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  float: left;
+}
+
+.number-item .add {
+  width: 93.75rpx;
+  height: 100%;
+  text-align: center;
+  line-height: 65rpx;
+}
+.confirm-btn{
+  background-color: #b4282d;
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 35rpx;
+  color: #fff;
+  border-radius: 0;
+  position: fixed;
+  bottom: 0;
+  z-index: 999;
+}
+.line-through {
+  text-decoration: line-through;
+}
+.topic-list .item .imgtt .imgline .priceInfo {
+  float: left;
+  text-align: left;
+  width: 60%;
+  height: 33rpx;
+  line-height: 38rpx;
+  overflow: hidden;
+  color: #fff;
+  font-size: 33rpx;
+  margin-top: 25rpx;
+  padding-left: 33rpx;
+}
+
+.more-group{
+  height: 100rpx;
+  line-height: 100rpx;
+  padding-left: 20rpx;
+  background-color: #fff;
+  font-size: 35rpx;
+}
+.more-group .more-link{
+  float: right;
+  padding-right: 20rpx;
+  color: #888;
+  font-size: 25rpx;
+}

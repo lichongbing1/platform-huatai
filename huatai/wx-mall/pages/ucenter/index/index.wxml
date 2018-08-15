@@ -1,0 +1,142 @@
+<view class="container">
+  <view class="userinfo" bindtap="goLogin">
+    <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" wx:if="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <view class='user-box'>
+      <view class="userinfo-nickname">{{userInfo.nickName}}</view>
+      <view class="userlevel" wx:if="{{userInfo.nickName!='点击头像登录'}}">{{curUser.userLevel}}</view>
+    </view>
+  </view>
+  <view class="order-menu">
+    <view class="item">
+      <navigator url="/pages/ucenter/order/order?tabIndex=1" class="a">
+        <view class="unpay-num" wx:if="{{unPayNum>0}}">{{unPayNum}}</view>
+        <text class="icon unpay"></text>
+        <text class="txt">待付款</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/order/order?tabIndex=2" class="a">
+        <view class="untake-num" wx:if="{{unTakeNum>0}}">{{unTakeNum}}</view>
+        <text class="icon delivery"></text>
+        <text class="txt">待收货</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/order/order?tabIndex=3" class="a">
+         <view class="uneval-num" wx:if="{{unEvaNum>0}}">{{unEvaNum}}</view>
+        <text class="icon evaluate"></text>
+        <text class="txt">待评价</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/order/order" class="a">
+        <text class="icon order"></text>
+        <text class="txt">全部订单</text>
+      </navigator>
+    </view>
+  </view>
+
+  <view class="user-menu">
+    <!-- <view class="item">
+      <navigator url="/pages/ucenter/order/order" class="a">
+        <text class="icon order"></text>
+        <text class="txt">我的订单</text>
+      </navigator>
+    </view> -->
+    <view class="item">
+      <navigator url="/pages/ucenter/coupon/coupon" class="a">
+        <text class="icon coupon"></text>
+        <text class="txt">优惠券</text>
+      </navigator>
+    </view>
+    <!-- <view class="item no-border">
+      <navigator url="url" class="a">
+        <text class="icon gift"></text>
+        <text class="txt">礼品卡</text>
+      </navigator>
+    </view> -->
+    <view class="item">
+      <navigator url="/pages/ucenter/collect/collect" class="a">
+        <text class="icon collect"></text>
+        <text class="txt">我的收藏</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/footprint/footprint" class="a">
+        <text class="icon security"></text>
+        <text class="txt">我的足迹</text>
+      </navigator>
+    </view>
+    <!-- <view class="item">
+      <navigator url="/pages/ucenter/share/share" class="a">
+        <text class="icon share"></text>
+        <text class="txt">我的分享</text>
+      </navigator>
+    </view> -->
+    <!-- <view class="item no-border">
+      <navigator url="url" class="a">
+        <text class="icon kefu"></text>
+        <text class="txt">会员福利</text>
+      </navigator>
+    </view> -->
+    <view class="item">
+      <navigator url="/pages/ucenter/address/address" class="a">
+        <!-- <navigator bindtap='addressManage' class="a"> -->
+        <text class="icon address"></text>
+        <text class="txt">地址管理</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/group/group" class="a">
+        <text class="icon group"></text>
+        <text class="txt">我的团购</text>
+      </navigator>
+    </view>
+    <!-- <view class="item">
+      <navigator url="/pages/ucenter/bargain/bargain" class="a">
+        <text class="icon bargain"></text>
+        <text class="txt">我的砍价</text>
+      </navigator>
+    </view> -->
+    <!-- <view class="item">
+      <navigator url="url" class="a">
+        <text class="icon security"></text>
+        <text class="txt">账号安全</text>
+      </navigator>
+    </view> -->
+    <view class="item" wx:if="{{riderVo.id > 0}}">
+      <navigator url="/pages/ucenter/rider/rider" class="a">
+        <text class="icon dispatch"></text>
+        <text class="txt">我是骑手</text>
+      </navigator>
+    </view>
+    <view class="item" wx:if="{{!riderVo.id}}">
+      <!-- <navigator url="/pages/ucenter/riderrecruit/riderrecruit" class="a"> -->
+      <navigator url="/pages/ucenter/rider/rider" class="a">
+        <text class="icon dispatch"></text>
+        <text class="txt">我是骑手</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/feedback/feedback" class="a">
+        <text class="icon feedback"></text>
+        <text class="txt">意见反馈</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <contact-button type="default-light" size="20" session-from="weapp">
+        <text class="icon kefu"></text>
+        <text class="txt">联系客服</text>
+      </contact-button>
+    </view>
+    <view class="item item-bottom">
+      <navigator url="/pages/ucenter/help/help" class="a">
+        <text class="icon help"></text>
+        <text class="txt">帮助中心</text>
+      </navigator>
+    </view>
+  </view>
+
+  <button wx:if="{{!curUser.mobile&&userInfo.nickName!='点击头像登录'}}" type='primary' class="logout" bindtap="bindMobile">绑定手机</button>
+  <!-- <button wx:if="{{userInfo.nickName!='点击头像登录'}}" type='warn' class="logout" bindtap="exitLogin">退出登录</button> -->
+</view>

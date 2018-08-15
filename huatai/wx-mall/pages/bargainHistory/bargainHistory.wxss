@@ -1,0 +1,19 @@
+page ,.container{
+   width: 750rpx;
+    height: 100%;
+    overflow: hidden;
+    background: #f4f4f4;
+}
+
+.topic-list .item .imgtt .imgline .priceInfo {
+  float: left;
+  text-align: left;
+  width: 60%;
+  height: 33rpx;
+  line-height: 38rpx;
+  overflow: hidden;
+  color: #fff;
+  font-size: 33rpx;
+  margin-top: 25rpx;
+  padding-left: 33rpx;
+}

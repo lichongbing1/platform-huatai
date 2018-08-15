@@ -1,0 +1,99 @@
+<scroll-view class="container" scroll-y="true">
+  <view class="backhome" bindtap="switchNav">
+    <image src="/static/images/home.png"></image>
+    <text style="padding-left: 5px;">首页</text>
+  </view>
+  <view wx:if="{{openAttr}}" class="modal-wrap"></view>
+  <navigator url="/pages/groupDetail/groupDetail?id={{group.id}}">
+    <view class="goods-info">
+      <image class="goods-pic" src="{{goods.list_pic_url}}"></image>
+      <view class="goods-desc">
+        <text class="goods-title">{{goods.name}}</text>
+        <view class="goods-price">
+          <text class="min-price">￥{{group.retail_min_price}}</text>
+          <text class="price">￥{{group.retail_price}}</text>
+        </view>
+        <view class="price-tag">
+          <text>{{min_open_group}}人拼团</text>
+          <text>拼团立省{{group.retail_price - group.retail_min_price}}元</text>
+        </view>
+      </view>
+    </view>
+  </navigator>
+  <view class="group-info">
+    <view wx:if="{{!attendList[0].overdue && (attendList[0].attend_status == 0 || attendList[0].attend_status == 1)}}">
+      <view wx:if="{{type == 1}}" class="desc">还差
+        <text>{{min_open_group - attend_num}}</text>位新人，快喊小伙伴一起拼团吧</view>
+      <view wx:if="{{type == 0}}" class="desc">已有{{attend_num}}参与，还差
+        <text>{{min_open_group - attend_num}}</text>人拼团成功</view>
+      <view class="deadline">仅剩
+        <text>{{groupEnd.dateformat.day}}天{{groupEnd.dateformat.hr}}:{{groupEnd.dateformat.min}}:{{groupEnd.dateformat.sec}}</text>失效</view>
+    </view>
+    <view wx:if="{{attendList[0].attend_status == 2}}" class="desc">拼团成功</view>
+    <view wx:if="{{attendList[0].attend_status == 3}}" class="desc">拼团失败</view>
+    <view wx:if="{{attendList[0].overdue && attendList[0].attend_status != 2 && attendList[0].attend_status != 3}}" class="desc">该活动已结束</view>
+    <view class="member">
+      <view wx:for="{{attendList}}" style="background-image: url({{item.avatar}})" wx:key="index" class="member-item {{ index == 0 ? 'member-chief' : 'member-group' }}"></view>
+      <view wx:for="{{min_open_group - attend_num}}" wx:key="index" class="member-item member-cell">?</view>
+    </view>
+  </view>
+  <view wx:if="{{openAttr}}" class="attr-pop">
+    <view class="attr-close" bindtap="switchAttrPop">X</view>
+    <view class="img-info">
+      <image class="img" src="{{goods.list_pic_url}}"></image>
+      <view class="info">
+        <view class="c">
+          <view class="p">价格：￥{{group.retail_min_price}}</view>
+          <view class="a" wx:if="{{productList.length>0}}">已选择：{{checkedSpecText}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="spec-con">
+      <view class="spec-item" wx:for="{{specificationList}}" wx:key="{{item.specification_id}}">
+        <view class="name">{{item.name}}</view>
+        <view class="values">
+          <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.valueList}}" wx:for-item="vitem" wx:key="{{vitem.id}}" data-value-id="{{vitem.id}}" data-name-id="{{vitem.specification_id}}">{{vitem.value}}</view>
+        </view>
+      </view>
+
+      <view class="number-item">
+        <view class="name">数量</view>
+        <view class="selnum">
+          <view class="cut" bindtap="cutNumber">-</view>
+          <input value="{{number}}" class="number" disabled="true" type="number" />
+          <view class="add" bindtap="addNumber">+</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <button wx:if="{{!attendList[0].overdue&&group.open_status==1 && (attendList[0].attend_status == 0 || attendList[0].attend_status == 1)}}" class="share-btn" open-type="share">
+    <image src="/static/images/weixin.png"></image>分享给微信好友</button>
+  <button wx-if="{{group.open_status!=1 || selfStatus == 1}}" class="more-link">已关闭</button>
+  <button wx-if="{{group.open_status==1&&type == 0 && !attendList[0].overdue}}" bindtap="switchAttrPop" class="join-btn">我要参团</button>
+  <button wx-if="{{openAttr && group.open_status==1}}" bindtap="checkProduct" class="confirm-btn">确定</button>
+  <view class="more-group">更多拼团
+    <navigator class="more-link" open-type="switchTab" url="/pages/goodsActivity/goodsActivity?type=0">更多 ></navigator>
+  </view>
+  <view class="topic-list">
+    <view class="item" wx:for="{{groupList}}" wx:key="{{item.id}}">
+      <view class="imgtt">
+        <image class="img" src="{{item.item_pic_url}}"></image>
+        <view class="imgline">
+          <view class="priceInfo">最低开团价：
+            <text class="price">￥{{item.retail_min_price}}</text>
+            <text class="orgPrice line-through">￥{{item.retail_price}}</text>
+          </view>
+          <view class="right">
+            <navigator url="../groupDetail/groupDetail?id={{item.id}}">
+              <button class="btn">立即开团</button>
+            </navigator>
+          </view>
+        </view>
+      </view>
+      <view class="info">
+        <text class="title">{{item.title}}</text>
+        <text class="desc">{{item.subtitle}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

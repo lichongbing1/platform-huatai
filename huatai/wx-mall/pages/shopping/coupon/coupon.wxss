@@ -1,0 +1,161 @@
+page {
+  background: #f4f4f4;
+  min-height: 100%;
+}
+
+.container {
+  background: #f4f4f4;
+  min-height: 100%;
+  padding-top: 30rpx;
+}
+
+.coupon-form {
+  height: 110rpx;
+  width: 100%;
+  background: #fff;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+  padding-top: 20rpx;
+  display: flex;
+}
+
+.input-box {
+  flex: 1;
+  height: 70rpx;
+  color: #333;
+  font-size: 24rpx;
+  background: #fff;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4rpx;
+  margin-right: 30rpx;
+}
+
+.input-box .coupon-sn {
+  position: absolute;
+  top: 10rpx;
+  left: 30rpx;
+  height: 50rpx;
+  width: 100%;
+  color: #000;
+  line-height: 50rpx;
+  font-size: 24rpx;
+}
+
+.clear-icon {
+  position: absolute;
+  top: 21rpx;
+  right: 30rpx;
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.add-btn {
+  height: 70rpx;
+  border: none;
+  width: 168rpx;
+  background: #b4282d;
+  border-radius: 0;
+  line-height: 70rpx;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.add-btn.disabled {
+  background: #ccc;
+}
+
+.help {
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: right;
+  padding-right: 30rpx;
+  background: url(http://image.meiping123.com/upload/20180104/112625319f1861.png) 590rpx center no-repeat;
+  background-size: 28rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+
+.coupon-box {
+  background-color: #fff;
+  display: flex;
+  border-radius: 5px;
+  flex-direction: row;
+  position: relative;
+}
+
+.coupon-box .coupon-used {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -7.5vmin;
+  height: 15vmin;
+  width: 15vmin;
+  background: url(https://www.meiping123.com/statics/img/icon_used.png) no-repeat center;
+  background-size: contain;
+}
+
+.coupon-box-g {
+  background: linear-gradient(to right, #f0f0f0, #fff);
+}
+
+.coupon-box1 {
+  border: 1px solid #fbb025;
+  border-left: none;
+}
+
+.coupon-box2 {
+  border: 1px solid #ccc;
+  border-left: none;
+}
+
+.coupon-bg {
+  width: 35%;
+  background-position: left;
+  background-size: cover;
+  color: #fff;
+  font-size: 2.4rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.coupon-bg > view{
+  font-size: inherit;
+  color: #fff;
+}
+.coupon-bg .coupon-currency {
+  font-size: 1rem;
+  padding-right: 5px;
+  color: #fff;
+}
+
+.coupon-bg .coupon-type {
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.coupon-bg1 {
+  background-image: url(https://www.meiping123.com/statics/img/bg_1.png);
+}
+
+.coupon-bg2 {
+  background-image: url(https://www.meiping123.com/statics/img/bg_2.png);
+}
+
+.coupon-info {
+  width: 50%;
+  margin-left: 40px;
+}
+
+.coupon-info .coupon-title {
+  font-size: 1.1rem;
+  padding: 8px 0 4px 0;
+}
+
+.coupon-info .coupon-desc {
+  font-size: 0.9rem;
+  color: #9b9b9b;
+  list-style: outside;
+  padding: 4px 0 8px 0;
+}

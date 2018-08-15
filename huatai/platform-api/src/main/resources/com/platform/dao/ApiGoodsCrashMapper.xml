@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiGoodsCrashMapper">
+
+    <resultMap type="com.platform.entity.GoodsCrashVo" id="goodsCrashMap">
+        <result property="id" column="id"/>
+        <result property="goods_id" column="goods_id"/>
+        <result property="goods_crash_id" column="goods_crash_id"/>
+        <result property="product_crash_id" column="product_crash_id"/>
+        <result property="retail_price" column="retail_price"/>
+        <result property="retail_crash_price" column="retail_crash_price"/>
+        <result property="product_name" column="product_name"/>
+        <result property="goods_name" column="goods_name"/>
+        <result property="list_pic_url" column="list_pic_url"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="goodsCrashMap">
+		select
+			`id`,
+			`goods_id`,
+			`goods_crash_id`,
+			`product_crash_id`,
+			`retail_crash_price`
+		from mall_goods_crash
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultMap="goodsCrashMap">
+        SELECT
+        a.`id`,
+        a.`goods_id`,
+        a.`goods_crash_id`,
+        a.`product_crash_id`,
+        a.`retail_crash_price`,
+        b.`name` AS goods_name,
+        b.`list_pic_url` AS list_pic_url,
+        c.`retail_price` AS retail_price
+        FROM
+        mall_goods_crash a
+        LEFT JOIN mall_goods b ON a.goods_crash_id = b.id
+        LEFT JOIN mall_product_store_rela c ON c.product_id = a.product_crash_id
+        WHERE 1=1 and c.stock_num > 0 AND b.is_delete = 0
+        <if test="goods_id != null and goods_id != ''">
+            AND a.goods_id = #{goods_id}
+        </if>
+        <if test="goods_ids != null">
+            AND a.goods_id in
+            <foreach item="item" collection="goods_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from mall_goods_crash
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+</mapper>

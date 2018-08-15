@@ -1,0 +1,128 @@
+<view class="container">
+  <view class="tab-bar">
+    <view wx:for="{{tabList}}" wx:key="{{index}}" bindtap="toggleTab" data-index="{{index}}" class="tab-bar-item {{ index == tabIndex ? 'active' : '' }}">{{ item }}</view>
+  </view>
+  <!-- 目标订单 -->
+  <view wx:if="{{tabIndex == 0}}" style="position: relative;">
+    <view wx:if="{{showPop}}" bindtap="switchPop" class="wrapper">
+    </view>
+    <view class="take-pop" wx:if="{{showPop&&takeOrderVo.id}}">
+      <view class="list-group" style="margin-top: 0;z-index: 670;">
+        <view class="list-cell">
+          <view class="list-cell-bd">
+            <view class="list-label">
+              <text style="color: orange;padding-right: 10px;">订单号 {{takeOrderVo.order_sn}}</text>
+            </view>
+            <view class="list-label" wx:if="{{takeOrderVo.delivery_date!=null}}">
+              <text style="color: orange;padding-right: 10px;">配送时间 {{takeOrderVo.delivery_date!=null?takeOrderVo.delivery_date:''}} {{takeOrderVo.delivery_remark!=null?takeOrderVo.delivery_remark:''}}</text>
+            </view>
+            <view class="list-label" wx:if="{{takeOrderVo.add_time!=null}}">
+              <text style="color: orange;padding-right: 10px;">下单时间 {{takeOrderVo.add_time}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="list-cell">
+          <view class="list-cell-bd">
+            <view class="list-label">{{takeOrderVo.consignee}}</view>
+            <view class="list-label-desc">{{takeOrderVo.address}}</view>
+          </view>
+          <view class="list-cell-ft">
+            <image style="width: 40rpx;height: 40rpx;" src="/static/images/icon-tel.png" bindtap="calling" data-mobile="{{takeOrderVo.mobile}}"></image>
+          </view>
+        </view>
+      </view>
+      <button type="primary" class="btn" data-order-id="{{takeOrderVo.id}}" bindtap="confTakeOrder">确认接单</button>
+    </view>
+    <map id="map" wx:if="{{!showPop}}" longitude="{{longitude}}" latitude="{{latitude}}" scale="14" controls="{{controls}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap" show-location style="width: 100%; height: 40vh;z-index: 600"></map>
+    <scroll-view scroll-y="true" style="height: 44vh">
+      <view wx:if="{{orderingList.length>0}}">
+        <view class="list-group" wx:for="{{orderingList}}" wx:for-item="item" wx:key="{{item.id}}" style="margin-top: 5px;">
+          <view class="list-cell">
+            <view class="list-cell-bd">
+              <view class="list-label">订单号：{{item.order_sn}}</view>
+            </view>
+          </view>
+          <view class="list-cell">
+            <view class="list-cell-bd">
+              <view class="list-label">客户：{{item.consignee}}
+                <text decode="{{true}}"> 配送时间：{{item.delivery_date!=null?item.delivery_date:''}}&nbsp; {{item.delivery_remark}}</text>
+              </view>
+              <view class="list-label-desc">地址：{{item.address}}</view>
+            </view>
+            <view class="list-cell-ft">
+              <image style="width: 40rpx;height: 40rpx;" src="/static/images/icon-tel.png" bindtap="calling" data-mobile="{{item.mobile}}"></image>
+            </view>
+          </view>
+          <view class="list-cell">
+            <view class="list-cell-bd">
+              <!-- <button type="primary" class="btn">确认接单</button> -->
+              <button type="primary" data-order-id="{{item.id}}" data-ship-id="{{item.shipping_no}}" bindtap="confirmOrder" class="btn">确认收货</button>
+              <button type="primary" data-order-id="{{item.id}}" data-ship-id="{{item.shipping_no}}" bindtap="cancelOrder" class="btn">取消接单</button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="scan-btn" bindtap="scanTakeOrder">扫一扫接单</view>
+  </view>
+  <!-- 完成订单 -->
+  <view wx:if="{{tabIndex == 1}}">
+    <scroll-view scroll-y="true" style="height: 92vh;">
+      <view class="list-group" style="margin-top: 5px;" wx:for="{{orderedList}}" wx:for-item="item" wx:key="{{item.id}}">
+        <view class="list-cell">
+          <view class="list-cell-bd">
+            <view class="list-label">
+              <text style="color: orange;padding-right: 10px;">{{item.confirm_time}}</text> {{item.order_sn}}</view>
+          </view>
+        </view>
+        <view class="list-cell">
+          <view class="list-cell-bd">
+            <view class="list-label">{{item.consignee}}</view>
+            <view class="list-label-desc">{{item.address}}</view>
+          </view>
+          <view class="list-cell-ft">
+            <image style="width: 40rpx;height: 40rpx;" src="/static/images/icon-tel.png" bindtap="calling" data-mobile="{{item.mobile}}"></image>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  <!-- 统计 -->
+  <view wx:if="{{tabIndex == 2}}">
+    <scroll-view scroll-y="true" style="height: 92vh;">
+      <view class="date-area">
+        <view class="date-row">
+          <view class="row-label">开始日期</view>
+          <picker mode="date" value="{{startDate}}" bindchange="handleStart" class="row-picker">
+            <view class="picker-box">
+              <view class="date-value">{{startDate}}</view>
+              <image src="/static/images/date_icon.png"></image>
+            </view>
+          </picker>
+        </view>
+        <view class="date-row">
+          <view class="row-label">尾部日期</view>
+          <picker mode="date" value="{{endDate}}" bindchange="handleEnd" class="row-picker">
+            <view class="picker-box">
+              <view class="date-value">{{endDate}}</view>
+              <image src="/static/images/date_icon.png"></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+      <view class="evaluate-area">
+        <view class="search-btn" bindtap="handleSearch">查询</view>
+        <view class="evaluate-row" wx:for="{{evaluateData.list}}" wx:key="{{index}}">
+          <view class="evaluate-cell evaluate-star {{'evaluate-star' + index}}">{{ index == 5 ? '未评价' : '' }}</view>
+          <view class="evaluate-cell">{{item.count }}</view>
+          <view class="evaluate-cell">{{item.price }}元</view>
+        </view>
+        <view class="evaluate-row">
+          <view class="evaluate-cell">总数</view>
+          <view class="evaluate-cell">{{evaluateData.count || 0 }}</view>
+          <view class="evaluate-cell">{{evaluateData.price || 0 }}元</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

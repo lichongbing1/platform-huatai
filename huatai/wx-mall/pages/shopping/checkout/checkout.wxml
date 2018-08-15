@@ -1,0 +1,100 @@
+<view class="container">
+  <view class="address-box">
+    <view class="address-item" bindtap="selectAddress">
+      <view class="l">
+        <text class="name">{{addressVo.userName}}</text>
+      </view>
+      <view class="m">
+        <text class="mobile" wx:if="{{addressVo.telNumber}}">{{addressVo.telNumber}}</text>
+        <text class="address">{{addressVo.provinceName +addressVo.cityName +addressVo.countyName + addressVo.detailInfo?addressVo.provinceName +addressVo.cityName +addressVo.countyName + addressVo.detailInfo:'选择地址'}}</text>
+      </view>
+      <view class="r">
+        <image src="/static/images/address_right.png"></image>
+      </view>
+    </view>
+    <view class="address-item address-empty" bindtap="addAddress" wx:if="{{addressVo.id <= 0}}">
+      <view class="m">
+        还没有收货地址，去添加
+      </view>
+      <view class="r">
+        <image src="/static/images/address_right.png"></image>
+      </view>
+    </view>
+  </view>
+  <view class="list-group" style="margin-top: 5px;">
+    <view class="list-cell">
+      <view class="list-cell-hd">
+        <image style="width: 20px;height:20px;" src="/static/images/cart-time.png"></image>
+      </view>
+      <view class="list-cell-bd">
+        <view style="padding-left:10px;" class="list-label">送达时间</view>
+      </view>
+      <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}" class="list-cell-ft router">
+        <view class="red-txt">{{delivery_date}}</view>
+        <text class="red-txt">{{delivery_remark}}</text>
+      </picker>
+    </view >
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">商品合计</view>
+      </view>
+      <view class="list-cell-ft">
+        <text class="txt">￥{{goodsTotalPrice}}</text>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">配送费</view>
+      </view>
+      <view class="list-cell-ft">
+        <text class="txt">￥{{freightPrice}}</text>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-bd">
+        <view class="list-label">满减</view>
+      </view>
+      <view class="list-cell-ft">
+        <text class="red-txt">-￥{{fullCutCouponDec}}</text>
+      </view>
+    </view>
+    <view class="list-cell" bindtap="selectCoupon" wx:if="{{couponList.length > 0}}">
+      <view class="list-cell-bd">
+        <text wx:if="{{checkedCoupon.id > 0}}" class="name">优惠券:{{checkedCoupon.coupon_name}}</text>
+        <text wx:if="{{!checkedCoupon}}" class="name">优惠券:未选择</text>
+      </view>
+      <view class="list-cell-ft router">
+        <text wx:if="{{checkedCoupon.id > 0}}" class="money red-txt">-￥{{checkedCoupon.type_money}}</text>
+        <text wx:if="{{!checkedCoupon}}" class="txt">{{couponList.length}}张</text>
+      </view>
+    </view>
+    <view class="list-cell">
+      <view class="list-cell-hd">
+        <view class="list-label">留言</view>
+        <textarea style="margin-left: 15px;height:22px" maxlength="60" bindblur="bindPostscriptBlur" placeholder="请输入留言信息" />
+      </view>
+    </view>
+  </view>
+
+  <view class="goods-items">
+    <view class="item" wx:for="{{checkedGoodsList}}" wx:key="{{item.id}}">
+      <view class="img">
+        <image src="{{item.list_pic_url}}"></image>
+      </view>
+      <view class="info">
+        <view class="t">
+          <view class="name">{{item.goods_name}}</view>
+          <text class="number">x{{item.number}}</text>
+        </view>
+        <view class="m">{{null==item.goods_specification_name_value?"":item.goods_specification_name_value}}</view>
+        <view class="b">￥{{item.retail_price}}</view>
+      </view>
+    </view>
+  </view>
+  <form bindsubmit="submitOrder" report-submit='true'>
+    <view class="order-total">
+      <view class="l">实付：￥{{actualPrice}}</view>
+      <button class="r" form-type="submit" wx:if="{{!isEditCart}}">去付款</button>
+    </view>
+  </form>
+</view>

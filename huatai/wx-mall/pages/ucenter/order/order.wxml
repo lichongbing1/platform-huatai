@@ -1,0 +1,61 @@
+<view class="container">
+  <view class="tab-bar">
+    <view wx:for="{{tabList}}" wx:key="{{index}}" bindtap="toggleTab" data-index="{{index}}" class="tab-bar-item {{ index == tabIndex ? 'active' : '' }}">{{ item }}</view>
+  </view>
+
+  <view class="orders" wx:if="{{orderList[0].id > 0}}">
+    <view class="list-group" wx:for="{{orderList}}" wx:key="{{index}}">
+      <navigator class="list-cell" url="../orderDetail/orderDetail?id={{item.id}}">
+        <view class="list-cell-bd">
+          <view class="list-label" style="color: #FE7200;">
+            {{item.order_status_text}}
+            <text class="add_time">{{item.add_time}}{{orderList[0].id}}</text>
+          </view>
+        </view>
+        <view class="list-cell-ft router">
+
+        </view>
+      </navigator>
+      <view class="list-cell">
+        <view class="list-cell-hd order-image-hd">
+          <navigator url="../orderDetail/orderDetail?id={{item.id}}">
+            <image class="order-image" src="{{item.goodsList[0].list_pic_url}}"></image>
+          </navigator>
+        </view>
+        <view class="list-cell-bd">
+          <navigator url="../orderDetail/orderDetail?id={{item.id}}">
+            <view class="order-details">
+              <view class="order-details-cell" wx:if="{{ index < 4 }}" wx:for="{{item.goodsList}}" wx:for-item="cell" wx:key="{{index}}">
+                <text class="name">{{cell.goods_name}}</text>
+                <text class="num">x{{cell.number}}</text>
+              </view>
+              <view wx:if="{{ item.goodsList.length > 4 }}" class="order-details-cell">
+                <text>...</text>
+              </view>
+              <view class="order-details-cell">
+                <text style="margin-left: auto;">共{{item.goodsCount}}份，实付<text class="price">￥{{item.actual_price}}</text></text>
+              </view>
+            </view>
+          </navigator>
+        </view>
+      </view>
+      <!-- 订单配送中 -->
+      <view class="list-cell" wx:if="{{item.order_status==300}}">
+        <map id="map" longitude="{{item.markers[0].longitude}}" latitude="{{item.markers[0].latitude}}" show-location include-points markers="{{item.markers}}" style="width: 100%; height: 30vh;z-index: 600"></map>
+      </view>
+
+      <view class="list-cell">
+        <view class="btn-box">
+          <button class="btn" data-order-id="{{item.id}}" catchtap="againBuy">再来一单</button>
+          <button class="btn" data-actual-price="{{item.actual_price}}" data-order-id="{{item.id}}" data-order-index="{{index}}" catchtap="payOrder" wx:if="{{item.handleOption.pay && item.dateformat}}">去付款 {{item.dateformat.min}}{{item.dateformat?':':''}}{{item.dateformat.sec}}</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="orders" wx:if="{{!orderList[0].id}}">
+  <view class="no-data">
+    <image src="/static/images/tip-null.png"></image>
+    <text>暂无订单</text>
+  </view>
+</view>

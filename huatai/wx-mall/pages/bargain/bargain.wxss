@@ -1,0 +1,36 @@
+page ,.container{
+   width: 750rpx;
+    height: 100%;
+    overflow: hidden;
+    background: #f4f4f4;
+}
+
+.topic-list .item .imgtt .imgline .priceInfo {
+  float: left;
+  text-align: left;
+  width: 60%;
+  height: 33rpx;
+  line-height: 38rpx;
+  overflow: hidden;
+  color: #fff;
+  font-size: 33rpx;
+  margin-top: 25rpx;
+  padding-left: 33rpx;
+}
+
+.history{
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size: 35rpx;
+  background-color: #fff;
+  margin: 20rpx 0;
+}
+
+.history .arrow{
+  background: url("http://image.meiping123.com/upload/20180104/104752297a18b9.png") no-repeat center;
+  background-size: 17rpx 27rpx;
+  display: inline-block;
+  height: 27rpx;
+  width: 27rpx;
+}
