@@ -112,7 +112,7 @@ Page({
                     });
 
                     //nav位置
-                    let currentIndex = 0;
+                    let currentIndex = -1;//modify 修改最后一个TAB无法显示问题
                     let navListCount = that.data.navList.length;
                     for (let i = 0; i < navListCount; i++) {
                         currentIndex += 1;
